@@ -1,14 +1,14 @@
-[gd_scene load_steps=3 format=3 uid="uid://ev3y1qlwrdo5"]
+[gd_scene load_steps=3 format=2]
 
-[ext_resource type="PackedScene" uid="uid://pcfgs75fbngf" path="res://entities/player.tscn" id="1_r3bhq"]
-[ext_resource type="PackedScene" uid="uid://ctpo6qu4qqea1" path="res://entities/block.tscn" id="2_xiar0"]
+[ext_resource path="res://entities/block.tscn" type="PackedScene" id=1]
+[ext_resource path="res://entities/player.tscn" type="PackedScene" id=2]
 
 [node name="LevelTest" type="Node2D"]
 
-[node name="Player" parent="." instance=ExtResource("1_r3bhq")]
-position = Vector2(417, 139)
+[node name="Player" parent="." instance=ExtResource( 2 )]
+position = Vector2( 414, 194 )
 
-[node name="Block" parent="." instance=ExtResource("2_xiar0")]
-position = Vector2(152, 190)
+[node name="Block" parent="." instance=ExtResource( 1 )]
+position = Vector2( 171, 239 )
 
 [editable path="Block"]

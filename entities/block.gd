@@ -1,9 +1,11 @@
 extends StaticBody2D
 
-@export var invert := false
+export var invert := false
 
-@onready var path := $Path2D
-var polygon: PackedVector2Array
+onready var path := $Path2D
+
+var polygon: PoolVector2Array
+var segments: Array
 
 func _ready() -> void:
 	var curve : Curve2D = path.curve
@@ -29,11 +31,12 @@ func _ready() -> void:
 		var collision_shape := CollisionShape2D.new()
 		collision_shape.set_shape(segment)
 		add_child(collision_shape)
+		segments.push_back(segment)
 	
 	var shape := Polygon2D.new()
 	shape.polygon = polygon
-	shape.color = Color.AQUAMARINE
-	shape.invert_enabled = invert
+	shape.color = Color.aquamarine
+	shape.invert_enable = invert
 	add_child(shape)
 
 func _process(delta: float) -> void:
