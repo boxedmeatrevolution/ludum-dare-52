@@ -1,0 +1,74 @@
+[gd_scene load_steps=7 format=3 uid="uid://pcfgs75fbngf"]
+
+[ext_resource type="Script" path="res://entities/player.gd" id="1_4akqj"]
+[ext_resource type="Texture2D" uid="uid://cwkmp0wkiio2x" path="res://sprites/player.png" id="2_b7rjb"]
+
+[sub_resource type="Animation" id="Animation_j45fe"]
+resource_name = "stand"
+length = 0.6
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 1]
+}
+
+[sub_resource type="Animation" id="Animation_5hv4l"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_keig5"]
+resource_name = "dash"
+length = 0.2
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 1]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_lhnqw"]
+_data = {
+"RESET": SubResource("Animation_5hv4l"),
+"dash": SubResource("Animation_keig5"),
+"stand": SubResource("Animation_j45fe")
+}
+
+[node name="Player" type="Node2D"]
+script = ExtResource("1_4akqj")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_b7rjb")
+offset = Vector2(0, -32)
+hframes = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "stand"
+libraries = {
+"": SubResource("AnimationLibrary_lhnqw")
+}

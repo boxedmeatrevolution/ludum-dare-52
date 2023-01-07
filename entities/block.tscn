@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://ctpo6qu4qqea1"]
+
+[ext_resource type="Script" path="res://entities/block.gd" id="1_r5153"]
+
+[sub_resource type="Curve2D" id="Curve2D_o3nq7"]
+_data = {
+"points": PackedVector2Array(-69.7111, 48.9354, 69.7111, -48.9354, 168, -37, -70.0791, -10.0113, 70.0791, 10.0113, 258, 90, 66.742, -6.6742, -66.742, 6.6742, 182, 245, -26.0294, 64.7397, 26.0294, -64.7397, -122, 112, 4.67194, 90.1017, -4.67194, -90.1017, 3, 1, -76.3864, 55.5652, 76.3864, -55.5652, 168, -37)
+}
+point_count = 6
+
+[node name="Block" type="StaticBody2D"]
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("1_r5153")
+
+[node name="Path2D" type="Path2D" parent="."]
+curve = SubResource("Curve2D_o3nq7")

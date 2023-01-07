@@ -11,5 +11,13 @@ config_version=5
 [application]
 
 config/name="LudumDare52"
+run/main_scene="res://levels/level_test.tscn"
 config/features=PackedStringArray("4.0", "Forward Plus")
 config/icon="res://icon.svg"
+
+[layer_names]
+
+2d_physics/layer_1="player"
+2d_physics/layer_2="blocks"
+2d_physics/layer_3="fruits"
+2d_physics/layer_4="hazards"
