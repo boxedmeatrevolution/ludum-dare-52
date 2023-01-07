@@ -33,7 +33,7 @@ func _ready() -> void:
 	var shape := Polygon2D.new()
 	shape.polygon = polygon
 	shape.color = Color.AQUAMARINE
-	#shape.invert_enabled = invert
+	shape.invert_enabled = invert
 	add_child(shape)
 
 func _process(delta: float) -> void:
