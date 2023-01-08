@@ -1,7 +1,9 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://sprites/player.png" type="Texture" id=1]
 [ext_resource path="res://entities/player.gd" type="Script" id=2]
+[ext_resource path="res://sounds/land.wav" type="AudioStream" id=3]
+[ext_resource path="res://sounds/dash.wav" type="AudioStream" id=4]
 
 [sub_resource type="Animation" id=2]
 length = 0.001
@@ -62,3 +64,11 @@ hframes = 2
 anims/RESET = SubResource( 2 )
 anims/dash = SubResource( 3 )
 anims/stand = SubResource( 1 )
+
+[node name="DashStream" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 4 )
+bus = "SoundEffects"
+
+[node name="LandStream" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 3 )
+bus = "SoundEffects"
