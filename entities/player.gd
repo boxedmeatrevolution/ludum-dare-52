@@ -55,6 +55,9 @@ func _ready() -> void:
 	dash_velocity = DASH_SPEED * Vector2.RIGHT
 
 func _physics_process(delta: float) -> void:
+	if $"/root/GameController".is_level_complete:
+		queue_free()
+	
 	if dash_input_timer > 0.0:
 		dash_input_timer -= delta
 	if Input.is_action_just_pressed("dash"):
@@ -298,4 +301,5 @@ func _on_HitBox_area_entered(area: Area2D) -> void:
 
 
 func _on_HurtBox_area_entered(area: Area2D) -> void:
-	print("Oh I have been slain");
+	queue_free()
+	$"/root/GameController".trigger_player_death()
