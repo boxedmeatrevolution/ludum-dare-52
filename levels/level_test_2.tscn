@@ -18,7 +18,7 @@ _data = {
 [node name="LevelTest2" type="Node2D"]
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
-position = Vector2( 183, 714 )
+position = Vector2( 115, 486 )
 
 [node name="Block" parent="." instance=ExtResource( 2 )]
 invert = true

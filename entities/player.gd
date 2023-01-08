@@ -179,9 +179,6 @@ func _physics_process(delta: float) -> void:
 			sprite.flip_h = (slide_velocity < 0.0)
 		else:
 			position = next_position
-			
-	handle_fruit_collisions()
-	handle_hazard_collisions()
 
 func get_tangent() -> Vector2:
 	if state == State.STAND || state == State.SLIDE:
@@ -227,16 +224,9 @@ func rotate_around_rotation_offset(rot: float) -> void:
 	sprite.rotation = rot
 	position += delta
 
-func handle_fruit_collisions() -> void:
-	var space_state := get_world_2d().direct_space_state
-	var collisions := space_state.intersect_point(position + head_collision_offset_vector(), 32, [], FRUIT_MASK, false, true)
-	for collision in collisions:
-		var fruit = collision.collider.get_parent()
-		fruit.harvest()
+func _on_HitBox_area_entered(area: Area2D) -> void:
+	var fruit = area.get_parent();
+	fruit.harvest()
 
-func handle_hazard_collisions() -> void:
-	var space_state := get_world_2d().direct_space_state
-	var collisions := space_state.intersect_point(position + head_collision_offset_vector(), 32, [], HAZARD_MASK, false, true)
-	for collision in collisions:
-		print("Oh I have been slain!")
-		var hazard = collision.collider.get_parent()
+func _on_HurtBox_area_entered(area: Area2D) -> void:
+	print("Oh I have been slain");
