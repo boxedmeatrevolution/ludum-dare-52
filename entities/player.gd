@@ -1,6 +1,7 @@
 extends Node2D
 
 const Block := preload("res://entities/block.gd")
+const BubbleDropletEffectScene := preload("res://entities/bubble_droplet_effect.tscn")
 
 enum State {
 	STAND,
@@ -21,7 +22,7 @@ const DASH_STEER_SENSITIVITY := 1.0 / 200.0
 const DASH_SPEED := 350.0#600.0
 const DASH_CHAIN_SPEED := 200.0#400.0
 const DASH_ACCEL := 100.0
-const SLIDE_SPEED_ICE := 400.0
+const SLIDE_SPEED_ICE := 300.0
 const SLIDE_SMOOTH_CROSS := 0.9
 const SLIDE_FRICTION := 8#800.0
 const SLIDE_FRICTION_ICE := 5#800.0
@@ -32,6 +33,8 @@ const PERFECT_DASH_TIME := 0.3
 
 onready var sprite := $Sprite
 onready var animation_player := $AnimationPlayer
+onready var bubble_effect := $BubbleEffect
+onready var bubble_animation_player := $BubbleEffect/AnimationPlayer
 
 var state: int = State.STAND
 
@@ -215,6 +218,15 @@ func _physics_process(delta: float) -> void:
 			if abs(slide_velocity) > max_speed:
 				slide_velocity = sign(slide_velocity) * max_speed
 			sprite.flip_h = (slide_velocity < 0.0)
+			bubble_effect.rotation = get_rotation()
+			bubble_animation_player.play("main")
+			var num_droplets := 8
+			for i in num_droplets:
+				var lambda := float(i) / (num_droplets - 1)
+				var bubble_droplet := BubbleDropletEffectScene.instance()
+				bubble_droplet.angle = lerp(-0.5 * PI, 0.5 * PI, lambda)
+				bubble_droplet.position = Vector2.ZERO
+				bubble_effect.add_child(bubble_droplet)
 		else:
 			position = next_position
 
