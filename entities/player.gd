@@ -41,11 +41,11 @@ func _physics_process(delta: float) -> void:
 		if Input.is_action_just_released("dash"):
 			var target_direction = (get_global_mouse_position() - position - rotation_offset_vector()).normalized()
 			if target_direction.dot(normal) > DASH_MIN_UPWARDNESS:
-				state = State.DASH
 				animation_player.play("dash")
 				dash_velocity = DASH_SPEED * target_direction
 				position += dash_velocity * delta + 1.0 * normal
 				rotate_around_rotation_offset(dash_velocity.angle() + 0.5 * PI)
+				state = State.DASH
 	elif state == State.SLIDE:
 		var normal := get_normal()
 		sprite.rotation = normal.angle() + 0.5 * PI
@@ -102,11 +102,11 @@ func _physics_process(delta: float) -> void:
 						slide_velocity = 0.0
 						max_distance = 0.0
 					else:
-						state = State.DASH
 						animation_player.play("dash")
 						dash_velocity = slide_velocity * old_tangent
 						position += dash_velocity * delta + 1.0 * old_normal
 						rotate_around_rotation_offset(dash_velocity.angle() + 0.5 * PI)
+						state = State.DASH
 				elif edge_distance < max_distance:
 					var old_tangent := get_tangent()
 					var old_normal := get_normal()
@@ -139,11 +139,11 @@ func _physics_process(delta: float) -> void:
 						slide_velocity = 0.0
 						max_distance = 0.0
 					else:
-						state = State.DASH
 						animation_player.play("dash")
 						dash_velocity = slide_velocity * old_tangent
 						position += dash_velocity * delta + 1.0 * old_normal
 						rotate_around_rotation_offset(dash_velocity.angle() + 0.5 * PI)
+						state = State.DASH
 				else:
 					stand_position = next_stand_position
 					position = next_position
@@ -151,18 +151,16 @@ func _physics_process(delta: float) -> void:
 		if Input.is_action_just_released("dash"):
 			var target_direction = (get_global_mouse_position() - position - rotation_offset_vector()).normalized()
 			if target_direction.dot(normal) > DASH_MIN_UPWARDNESS:
-				state = State.DASH
 				animation_player.play("dash")
 				dash_velocity = DASH_SPEED * target_direction
 				position += dash_velocity * delta + 1.0 * normal
 				rotate_around_rotation_offset(dash_velocity.angle() + 0.5 * PI)
+				state = State.DASH
 	elif state == State.DASH:
-		#if dash_velocity.angle() + 0.5 * PI != sprite.rotation:
-		#	rotate_around_rotation_offset(dash_velocity.angle() + 0.5 * PI)
 		var space_state := get_world_2d().direct_space_state
 		var delta_position := dash_velocity * delta
 		var next_position := position + delta_position
-		var raycast := space_state.intersect_ray(position, next_position + dash_velocity.normalized() * HEAD_COLLISION_OFFSET, [], BLOCK_MASK)
+		var raycast := space_state.intersect_ray(position + dash_velocity.normalized() * HEAD_COLLISION_OFFSET, next_position + dash_velocity.normalized() * HEAD_COLLISION_OFFSET, [], BLOCK_MASK)
 		if raycast:
 			state = State.SLIDE
 			animation_player.play("slide")
@@ -194,6 +192,13 @@ func get_tangent() -> Vector2:
 func get_normal() -> Vector2:
 	return get_tangent().rotated(-0.5 * PI)
 
+func get_rotation() -> float:
+	if state == State.STAND || state == State.SLIDE:
+		return get_tangent().angle()
+	elif state == State.DASH:
+		return dash_velocity.angle()
+	return NAN
+
 func convert_pos_seg_to_global(block: Block, segment_idx: int, segment_position: float) -> Vector2:
 	var segment : SegmentShape2D = block.segments[segment_idx]
 	var position := segment.a + block.position + segment_position * (segment.b - segment.a).normalized()
@@ -208,13 +213,13 @@ func convert_pos_global_to_seg(block: Block, segment_idx: int, position: Vector2
 	return segment_position
 
 func rotation_offset_vector() -> Vector2:
-	return Vector2(0, -ROTATION_OFFSET).rotated(sprite.rotation)
+	return Vector2(0, -ROTATION_OFFSET).rotated(get_rotation())
 	
-func HEAD_COLLISION_OFFSET_vector() -> Vector2:
-	return Vector2(0, -HEAD_COLLISION_OFFSET).rotated(sprite.rotation)
+func head_collision_offset_vector() -> Vector2:
+	return Vector2(0, -HEAD_COLLISION_OFFSET).rotated(get_rotation())
 
 func rotate_around_rotation_offset(rot: float) -> void:
-	var angle = rot - sprite.rotation
+	var angle = rot - get_rotation()
 	var offset = rotation_offset_vector()
 	var delta = offset - offset.rotated(angle)
 	sprite.rotation = rot
@@ -223,7 +228,7 @@ func rotate_around_rotation_offset(rot: float) -> void:
 func handle_fruit_collisions() -> void:
 	var space_state := get_world_2d().direct_space_state
 	var mask := 0b0000000000000100 #Fruit
-	var collisions := space_state.intersect_point(position + HEAD_COLLISION_OFFSET_vector(), 32, [], mask, false, true)
+	var collisions := space_state.intersect_point(position + head_collision_offset_vector(), 32, [], mask, false, true)
 	for collision in collisions:
 		var fruit = collision.collider.get_parent()
 		fruit.harvest()
@@ -231,7 +236,7 @@ func handle_fruit_collisions() -> void:
 func handle_hazard_collisions() -> void:
 	var space_state := get_world_2d().direct_space_state
 	var mask := 0b0000000000001000 #hazard
-	var collisions := space_state.intersect_point(position + HEAD_COLLISION_OFFSET_vector(), 32, [], mask, false, true)
+	var collisions := space_state.intersect_point(position + head_collision_offset_vector(), 32, [], mask, false, true)
 	for collision in collisions:
 		print("Oh I have been slain!")
 		var hazard = collision.collider.get_parent()
