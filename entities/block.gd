@@ -27,6 +27,9 @@ func _ready() -> void:
 			texture = GRASS_TEXTURE
 			texture_scale = 0.5
 	
+	position += path.position
+	path.position = Vector2.ZERO
+	
 	# Close the curve by averaging first and last points.
 	var curve : Curve2D = path.curve
 	var count := curve.get_point_count()
