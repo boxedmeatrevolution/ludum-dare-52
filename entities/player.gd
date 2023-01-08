@@ -32,6 +32,7 @@ func _physics_process(delta: float) -> void:
 			var target_direction := (get_global_mouse_position() - position).normalized()
 			if target_direction.dot(normal) > 0.0:
 				state = State.DASH
+				animation_player.play("dash")
 				dash_velocity = DASH_SPEED * target_direction
 				position += dash_velocity * delta + 1.0 * normal
 	elif state == State.DASH:
@@ -44,6 +45,7 @@ func _physics_process(delta: float) -> void:
 		if raycast:
 			position = raycast.position
 			state = State.STAND
+			animation_player.play("stand")
 			stand_block = raycast.collider
 			stand_segment_idx = raycast.shape
 			var segment : SegmentShape2D = stand_block.segments[stand_segment_idx]
