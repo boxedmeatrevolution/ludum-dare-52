@@ -175,6 +175,7 @@ func _physics_process(delta: float) -> void:
 			var max_speed := SLIDE_SPEED_ICE
 			if abs(slide_velocity) > max_speed:
 				slide_velocity = sign(slide_velocity) * max_speed
+			sprite.flip_h = (slide_velocity < 0.0)
 		else:
 			position = next_position
 			
