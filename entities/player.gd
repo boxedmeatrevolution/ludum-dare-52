@@ -59,6 +59,9 @@ func _physics_process(delta: float) -> void:
 			sprite.rotation = normal.angle() + 0.5 * PI
 		else:
 			position = next_position
+			
+	handle_fruit_collisions()
+	handle_hazard_collisions()
 
 func get_normal() -> Vector2:
 	var segment : SegmentShape2D = stand_block.segments[stand_segment_idx]
@@ -67,6 +70,9 @@ func get_normal() -> Vector2:
 
 func rotation_offset_vector() -> Vector2:
 	return Vector2(0, -rotation_offset).rotated(sprite.rotation)
+	
+func head_collision_offset_vector() -> Vector2:
+	return Vector2(0, -head_collision_offset).rotated(sprite.rotation)
 
 func rotate_around_rotation_offset(rot: float) -> void:
 	var angle = rot - sprite.rotation
@@ -75,3 +81,18 @@ func rotate_around_rotation_offset(rot: float) -> void:
 	sprite.rotation = rot
 	position += delta
 
+func handle_fruit_collisions() -> void:
+	var space_state := get_world_2d().direct_space_state
+	var mask := 0b0000000000000100 #Fruit
+	var collisions := space_state.intersect_point(position + head_collision_offset_vector(), 32, [], mask, false, true)
+	for collision in collisions:
+		var fruit = collision.collider.get_parent()
+		fruit.harvest()
+
+func handle_hazard_collisions() -> void:
+	var space_state := get_world_2d().direct_space_state
+	var mask := 0b0000000000001000 #hazard
+	var collisions := space_state.intersect_point(position + head_collision_offset_vector(), 32, [], mask, false, true)
+	for collision in collisions:
+		print("Oh I have been slain!")
+		var hazard = collision.collider.get_parent()
