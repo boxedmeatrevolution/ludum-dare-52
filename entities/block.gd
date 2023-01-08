@@ -1,14 +1,20 @@
 extends StaticBody2D
 
 export var invert := false
+export var texture : Texture = null
+export var texture_scale := 1.0
 
 onready var path := $Path2D
+onready var mesh_interior := $PolygonInterior
+onready var mesh_border := $MeshInstanceBorder
 
 var polygon: PoolVector2Array
+var polygon_inner: PoolVector2Array
+var polygon_outer: PoolVector2Array
 var segments: Array
-var dir := 1
 
 func _ready() -> void:
+	# Close the curve by averaging first and last points.
 	var curve : Curve2D = path.curve
 	var count := curve.get_point_count()
 	var first := curve.get_point_position(0)
@@ -21,28 +27,86 @@ func _ready() -> void:
 	curve.set_point_position(count - 1, point)
 	curve.set_point_out(0, curve_param)
 	curve.set_point_in(count - 1, -curve_param)
-	polygon = curve.tessellate(5, 4)
 	
+	# Tesselate to make the collision polygon.
+	polygon = curve.tessellate(5, 4)
+	polygon.remove(polygon.size() - 1)
+	
+	# Check the orientation.
 	var angle := 0.0
+	var perimeter := 0.0
 	for i in polygon.size():
-		var prev := polygon[i]
-		var current := polygon[(i + 1) % polygon.size()]
-		var next := polygon[(i + 2) % polygon.size()]
-		var tangent_1 : Vector2 = (current - prev).normalized()
-		var tangent_2 : Vector2 = (next - current).normalized()
+		var prev : Vector2 = polygon[i]
+		var current : Vector2 = polygon[(i + 1) % polygon.size()]
+		var next : Vector2 = polygon[(i + 2) % polygon.size()]
+		var tangent_1 := (current - prev).normalized()
+		var tangent_2 := (next - current).normalized()
+		perimeter += (next - current).length()
 		angle += tangent_1.angle_to(tangent_2)
+	var flip := false
 	if angle > PI && angle < 3 * PI:
-		dir = 1
+		flip = invert
 	elif angle > -3 * PI && angle < -PI:
-		dir = -1
+		flip = !invert
 	else:
 		print("Bad Bezier!")
-	if invert:
-		dir = -dir
+	if flip:
+		polygon.invert()
 	
-	for i in polygon.size() - 1:
+	# Make the padded polygons.
+	for i in polygon.size():
+		var prev := polygon[(i + polygon.size() - 1) % polygon.size()]
+		var current := polygon[i]
+		var next := polygon[(i + 1) % polygon.size()]
+		var tangent_1 : Vector2 = (current - prev).normalized()
+		var tangent_2 : Vector2 = (next - current).normalized()
+		var normal_1 := Vector2(tangent_1.y, -tangent_1.x)
+		var normal_2 := Vector2(tangent_2.y, -tangent_2.x)
+		var offset := tangent_1 / (normal_2.dot(tangent_1)) + tangent_2 / (normal_1.dot(tangent_2))
+		polygon_inner.append(current + 0.5 * texture_scale * texture.get_height() * offset)
+		polygon_outer.append(current - 0.5 * texture_scale * texture.get_height() * offset)
+	
+	# Fill the interior mesh.
+	mesh_interior.polygon = polygon
+	mesh_interior.invert_enable = invert
+	mesh_interior.color = Color.black
+	
+	# Fill the border mesh.
+	var vertices := PoolVector2Array()
+	var indices := PoolIntArray()
+	var uvs := PoolVector2Array()
+	uvs.resize(2 * (polygon.size() + 1))
+	vertices.append_array(polygon_inner)
+	vertices.push_back(polygon_inner[0])
+	vertices.append_array(polygon_outer)
+	vertices.push_back(polygon_outer[0])
+	var uv_max := round(perimeter / (texture_scale * texture.get_width()))
+	if uv_max <= 0.0:
+		uv_max = 1.0
+	var distance := 0.0
+	for i in polygon.size() + 1:
+		var uv_x := (distance / perimeter) * uv_max
+		indices.append(i)
+		indices.append(i + polygon.size() + 1)
+		uvs[i] = Vector2(uv_x, 0.0)
+		uvs[i + polygon.size() + 1] = Vector2(uv_x, 1.0)
+		var prev : Vector2 = polygon[i % polygon.size()]
+		var next : Vector2 = polygon[(i + 1) % polygon.size()]
+		distance += (next - prev).length()
+	var array_mesh_border := ArrayMesh.new()
+	var arrays_border := []
+	arrays_border.resize(ArrayMesh.ARRAY_MAX)
+	arrays_border[ArrayMesh.ARRAY_VERTEX] = vertices
+	arrays_border[ArrayMesh.ARRAY_TEX_UV] = uvs
+	arrays_border[ArrayMesh.ARRAY_INDEX] = indices
+	array_mesh_border.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLE_STRIP, arrays_border)
+	mesh_border.mesh = array_mesh_border
+	mesh_border.texture = texture
+	
+	# Make the collision objects.
+	for i in polygon.size():
 		var prev := polygon[i]
-		var next := polygon[i + 1]
+		var next := polygon[(i + 1) % polygon.size()]
 		var segment := SegmentShape2D.new()
 		segment.a = prev
 		segment.b = next
@@ -50,12 +114,6 @@ func _ready() -> void:
 		collision_shape.set_shape(segment)
 		add_child(collision_shape)
 		segments.push_back(segment)
-	
-	var shape := Polygon2D.new()
-	shape.polygon = polygon
-	shape.color = Color.aquamarine
-	shape.invert_enable = invert
-	add_child(shape)
 
 func _process(delta: float) -> void:
 	pass

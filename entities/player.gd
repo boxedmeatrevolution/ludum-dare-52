@@ -26,7 +26,7 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	if state == State.STAND:
 		var segment : SegmentShape2D = stand_block.segments[stand_segment_idx]
-		var normal := stand_block.dir * (segment.b - segment.a).normalized().rotated(-0.5 * PI)
+		var normal := (segment.b - segment.a).normalized().rotated(-0.5 * PI)
 		sprite.rotation = normal.angle() + 0.5 * PI
 		if Input.is_action_just_released("dash"):
 			var target_direction := (get_global_mouse_position() - position).normalized()
