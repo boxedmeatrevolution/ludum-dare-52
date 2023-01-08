@@ -12,10 +12,11 @@ const BLOCK_MASK := 0b0000000000000010
 const FRUIT_MASK := 0b0000000000000100
 const HAZARD_MASK := 0b000000000001000
 
-const DASH_STEER_STRENGTH := 0.6
+const DASH_STEER_STRENGTH := 0.3#0.6
 const DASH_STEER_SENSITIVITY := 1.0 / 200.0
-const DASH_SPEED := 700.0#600.0
-const DASH_ACCEL := 500.0
+const DASH_SPEED := 350.0#600.0
+const DASH_CHAIN_SPEED := 200.0#400.0
+const DASH_ACCEL := 100.0
 const SLIDE_SPEED_ICE := 400.0
 const SLIDE_SMOOTH_CROSS := 0.9
 const SLIDE_FRICTION := 8#800.0
@@ -23,6 +24,7 @@ const SLIDE_FRICTION_ICE := 5#800.0
 const DASH_MIN_UPWARDNESS := -0.8
 const ROTATION_OFFSET := 30.0
 const HEAD_COLLISION_OFFSET := 30.0
+const PERFECT_DASH_TIME := 0.3
 
 onready var sprite := $Sprite
 onready var animation_player := $AnimationPlayer
@@ -34,26 +36,42 @@ var stand_segment_idx := 0
 var stand_position := 0.0
 var slide_velocity := 0.0
 var dash_velocity := Vector2.ZERO
+var dash_chain := 0
+var perfect_dash_timer := 0.0
+
+const DASH_INPUT_TIME := 0.1
+var dash_input_timer := 0.0
 
 func _ready() -> void:
 	state = State.DASH
 	dash_velocity = DASH_SPEED * Vector2.RIGHT
 
 func _physics_process(delta: float) -> void:
+	if dash_input_timer > 0.0:
+		dash_input_timer -= delta
+	if Input.is_action_just_pressed("dash"):
+		dash_input_timer = DASH_INPUT_TIME
+	if state == State.STAND || state == State.SLIDE:
+		if perfect_dash_timer > 0.0:
+			perfect_dash_timer -= delta
+		else:
+			perfect_dash_timer = 0.0
+			dash_chain = 0
 	if state == State.STAND:
 		var normal := get_normal()
 		var target_rotation := normal.angle() + 0.5 * PI
 		var delta_rotation := fmod(sprite.rotation - target_rotation + PI, 2 * PI) - PI
 		sprite.rotation = delta_rotation * exp(-delta / 0.05) + target_rotation
 		#sprite.rotation -= delta_rotation * delta / 0.1
-		if Input.is_action_just_released("dash"):
-			var target_direction = (get_global_mouse_position() - position - rotation_offset_vector()).normalized()
+		if input_dash_check():
+			var target_direction = input_target_position()
 			if target_direction.dot(normal) > DASH_MIN_UPWARDNESS:
 				animation_player.play("dash")
-				dash_velocity = DASH_SPEED * target_direction
+				dash_velocity = (DASH_SPEED + tanh(dash_chain / 4) * DASH_CHAIN_SPEED) * target_direction
 				position += dash_velocity * delta + 1.0 * normal
 				rotate_around_rotation_offset(dash_velocity.angle() + 0.5 * PI)
 				state = State.DASH
+				dash_chain += 1
 	elif state == State.SLIDE:
 		var normal := get_normal()
 		var target_rotation := normal.angle() + 0.5 * PI
@@ -159,14 +177,15 @@ func _physics_process(delta: float) -> void:
 					stand_position = next_stand_position
 					position = next_position
 					max_distance = 0.0
-		if Input.is_action_just_released("dash"):
-			var target_direction := (get_global_mouse_position() - position - rotation_offset_vector()).normalized()
+		if input_dash_check():
+			var target_direction := input_target_position()
 			if target_direction.dot(normal) > DASH_MIN_UPWARDNESS:
 				animation_player.play("dash")
-				dash_velocity = DASH_SPEED * target_direction
+				dash_velocity = (DASH_SPEED + tanh(dash_chain / 4) * DASH_CHAIN_SPEED) * target_direction
 				position += dash_velocity * delta + 1.0 * normal
 				rotate_around_rotation_offset(dash_velocity.angle() + 0.5 * PI)
 				state = State.DASH
+				dash_chain += 1
 	elif state == State.DASH:
 		# Angle position based on relative mouse coordinate
 		var target_delta := (get_global_mouse_position() - position - rotation_offset_vector())
@@ -180,6 +199,7 @@ func _physics_process(delta: float) -> void:
 		var raycast := space_state.intersect_ray(position + dash_velocity.normalized() * HEAD_COLLISION_OFFSET, next_position + dash_velocity.normalized() * HEAD_COLLISION_OFFSET, [], BLOCK_MASK)
 		if raycast:
 			state = State.SLIDE
+			perfect_dash_timer = PERFECT_DASH_TIME
 			animation_player.play("slide")
 			stand_block = raycast.collider
 			stand_segment_idx = raycast.shape
@@ -193,6 +213,12 @@ func _physics_process(delta: float) -> void:
 			sprite.flip_h = (slide_velocity < 0.0)
 		else:
 			position = next_position
+
+func input_dash_check() -> bool:
+	return dash_input_timer > 0.0
+
+func input_target_position() -> Vector2:
+	return (get_global_mouse_position() - position - rotation_offset_vector()).normalized()
 
 func get_tangent() -> Vector2:
 	if state == State.STAND || state == State.SLIDE:
