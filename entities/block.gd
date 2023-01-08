@@ -6,6 +6,7 @@ onready var path := $Path2D
 
 var polygon: PoolVector2Array
 var segments: Array
+var dir := 1
 
 func _ready() -> void:
 	var curve : Curve2D = path.curve
@@ -21,6 +22,23 @@ func _ready() -> void:
 	curve.set_point_out(0, curve_param)
 	curve.set_point_in(count - 1, -curve_param)
 	polygon = curve.tessellate(5, 4)
+	
+	var angle := 0.0
+	for i in polygon.size():
+		var prev := polygon[i]
+		var current := polygon[(i + 1) % polygon.size()]
+		var next := polygon[(i + 2) % polygon.size()]
+		var tangent_1 : Vector2 = (current - prev).normalized()
+		var tangent_2 : Vector2 = (next - current).normalized()
+		angle += tangent_1.angle_to(tangent_2)
+	if angle > PI && angle < 3 * PI:
+		dir = 1
+	elif angle > -3 * PI && angle < -PI:
+		dir = -1
+	else:
+		print("Bad Bezier!")
+	if invert:
+		dir = -dir
 	
 	for i in polygon.size() - 1:
 		var prev := polygon[i]
