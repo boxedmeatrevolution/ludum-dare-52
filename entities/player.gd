@@ -12,7 +12,10 @@ const BLOCK_MASK := 0b0000000000000010
 const FRUIT_MASK := 0b0000000000000100
 const HAZARD_MASK := 0b000000000001000
 
-const DASH_SPEED := 600.0
+const DASH_STEER_STRENGTH := 0.6
+const DASH_STEER_SENSITIVITY := 1.0 / 200.0
+const DASH_SPEED := 700.0#600.0
+const DASH_ACCEL := 500.0
 const SLIDE_SPEED_ICE := 400.0
 const SLIDE_SMOOTH_CROSS := 0.9
 const SLIDE_FRICTION := 8#800.0
@@ -41,7 +44,7 @@ func _physics_process(delta: float) -> void:
 		var normal := get_normal()
 		var target_rotation := normal.angle() + 0.5 * PI
 		var delta_rotation := fmod(sprite.rotation - target_rotation + PI, 2 * PI) - PI
-		sprite.rotation = delta_rotation * exp(-delta / 0.1) + target_rotation
+		sprite.rotation = delta_rotation * exp(-delta / 0.05) + target_rotation
 		#sprite.rotation -= delta_rotation * delta / 0.1
 		if Input.is_action_just_released("dash"):
 			var target_direction = (get_global_mouse_position() - position - rotation_offset_vector()).normalized()
@@ -55,7 +58,7 @@ func _physics_process(delta: float) -> void:
 		var normal := get_normal()
 		var target_rotation := normal.angle() + 0.5 * PI
 		var delta_rotation := fmod(sprite.rotation - target_rotation + PI, 2 * PI) - PI
-		sprite.rotation = delta_rotation * exp(-delta / 0.1) + target_rotation
+		sprite.rotation = delta_rotation * exp(-delta / 0.05) + target_rotation
 		#sprite.rotation -= delta_rotation * delta / 0.1
 		var friction := SLIDE_FRICTION
 		if stand_block.ice:
@@ -157,7 +160,7 @@ func _physics_process(delta: float) -> void:
 					position = next_position
 					max_distance = 0.0
 		if Input.is_action_just_released("dash"):
-			var target_direction = (get_global_mouse_position() - position - rotation_offset_vector()).normalized()
+			var target_direction := (get_global_mouse_position() - position - rotation_offset_vector()).normalized()
 			if target_direction.dot(normal) > DASH_MIN_UPWARDNESS:
 				animation_player.play("dash")
 				dash_velocity = DASH_SPEED * target_direction
@@ -165,6 +168,12 @@ func _physics_process(delta: float) -> void:
 				rotate_around_rotation_offset(dash_velocity.angle() + 0.5 * PI)
 				state = State.DASH
 	elif state == State.DASH:
+		# Angle position based on relative mouse coordinate
+		var target_delta := (get_global_mouse_position() - position - rotation_offset_vector())
+		var steering := -DASH_STEER_STRENGTH * tanh(target_delta.cross(dash_velocity.normalized()) * DASH_STEER_SENSITIVITY)
+		dash_velocity = dash_velocity.rotated(steering * delta)
+		dash_velocity += DASH_ACCEL * dash_velocity.normalized() * delta
+		sprite.rotation = get_rotation()
 		var space_state := get_world_2d().direct_space_state
 		var delta_position := dash_velocity * delta
 		var next_position := position + delta_position
