@@ -2,6 +2,7 @@ extends Node2D
 
 const Block := preload("res://entities/block.gd")
 const BubbleDropletEffectScene := preload("res://entities/bubble_droplet_effect.tscn")
+const LaunchEffectScene := preload("res://entities/launch_effect.tscn")
 
 enum State {
 	STAND,
@@ -75,6 +76,10 @@ func _physics_process(delta: float) -> void:
 				rotate_around_rotation_offset(dash_velocity.angle() + 0.5 * PI)
 				state = State.DASH
 				dash_chain += 1
+				var launch_effect := LaunchEffectScene.instance()
+				get_parent().add_child_below_node(self, launch_effect)
+				launch_effect.rotation = get_rotation()
+				launch_effect.position = position
 	elif state == State.SLIDE:
 		var normal := get_normal()
 		var target_rotation := normal.angle() + 0.5 * PI
@@ -189,6 +194,10 @@ func _physics_process(delta: float) -> void:
 				rotate_around_rotation_offset(dash_velocity.angle() + 0.5 * PI)
 				state = State.DASH
 				dash_chain += 1
+				var launch_effect := LaunchEffectScene.instance()
+				get_parent().add_child_below_node(self, launch_effect)
+				launch_effect.rotation = get_rotation()
+				launch_effect.position = position
 	elif state == State.DASH:
 		# Angle position based on relative mouse coordinate
 		var target_delta := (get_global_mouse_position() - position - rotation_offset_vector())
