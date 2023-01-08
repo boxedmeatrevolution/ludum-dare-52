@@ -39,7 +39,10 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	if state == State.STAND:
 		var normal := get_normal()
-		sprite.rotation = normal.angle() + 0.5 * PI
+		var target_rotation := normal.angle() + 0.5 * PI
+		var delta_rotation := fmod(sprite.rotation - target_rotation + PI, 2 * PI) - PI
+		sprite.rotation = delta_rotation * exp(-delta / 0.1) + target_rotation
+		#sprite.rotation -= delta_rotation * delta / 0.1
 		if Input.is_action_just_released("dash"):
 			var target_direction = (get_global_mouse_position() - position - rotation_offset_vector()).normalized()
 			if target_direction.dot(normal) > DASH_MIN_UPWARDNESS:
@@ -50,7 +53,10 @@ func _physics_process(delta: float) -> void:
 				state = State.DASH
 	elif state == State.SLIDE:
 		var normal := get_normal()
-		sprite.rotation = normal.angle() + 0.5 * PI
+		var target_rotation := normal.angle() + 0.5 * PI
+		var delta_rotation := fmod(sprite.rotation - target_rotation + PI, 2 * PI) - PI
+		sprite.rotation = delta_rotation * exp(-delta / 0.1) + target_rotation
+		#sprite.rotation -= delta_rotation * delta / 0.1
 		var friction := SLIDE_FRICTION
 		if stand_block.ice:
 			if abs(slide_velocity) >= SLIDE_SPEED_ICE:
@@ -170,7 +176,6 @@ func _physics_process(delta: float) -> void:
 			stand_segment_idx = raycast.shape
 			stand_position = convert_pos_global_to_seg(stand_block, stand_segment_idx, raycast.position)
 			position = convert_pos_seg_to_global(stand_block, stand_segment_idx, stand_position)
-			sprite.rotation = get_normal().angle() + 0.5 * PI
 			var slide_velocity_factor := get_tangent().dot(dash_velocity.normalized())
 			slide_velocity = dash_velocity.length() * slide_velocity_factor
 			var max_speed := SLIDE_SPEED_ICE
@@ -193,9 +198,9 @@ func get_normal() -> Vector2:
 
 func get_rotation() -> float:
 	if state == State.STAND || state == State.SLIDE:
-		return get_tangent().angle()
+		return get_normal().angle() + 0.5 * PI
 	elif state == State.DASH:
-		return dash_velocity.angle()
+		return dash_velocity.angle() + 0.5 * PI
 	return NAN
 
 func convert_pos_seg_to_global(block: Block, segment_idx: int, segment_position: float) -> Vector2:
