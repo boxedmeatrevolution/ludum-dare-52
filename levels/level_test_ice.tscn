@@ -1,0 +1,37 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://entities/player.tscn" type="PackedScene" id=1]
+[ext_resource path="res://entities/block.tscn" type="PackedScene" id=2]
+
+[sub_resource type="Curve2D" id=1]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 95, 35, 0, 0, 0, 0, 95, 738, 0, 0, 0, 0, 1341, 733, 0, 0, 0, 0, 1336, 36, 0, 0, 0, 0, 95, 35 )
+}
+
+[sub_resource type="Curve2D" id=2]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 665, 26, 0, 0, 0, 0, 612, 26, 0, 0, 0, 0, 135, 49, 0, 0, 0, 0, 61, 48, 0, 0, 0, 0, 61, 727, 0, 0, 0, 0, 418, 722, 0, 0, 0, 0, 710, 969, 0, 0, 0, 0, 1021, 722, 0, 0, 0, 0, 1277, 719, 0, 0, 0, 0, 1275, 53, 0, 0, 0, 0, 1167, 53, 0, 0, 0, 0, 904, 26, 0, 0, 0, 0, 694, 26, 0, 0, 0, 0, 665, 26 )
+}
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Player" parent="." instance=ExtResource( 1 )]
+position = Vector2( 309, 609 )
+
+[node name="Block" parent="." instance=ExtResource( 2 )]
+position = Vector2( -47, 0 )
+invert = true
+ice = true
+
+[node name="Path2D" parent="Block" index="0"]
+curve = SubResource( 1 )
+
+[node name="Block2" parent="." instance=ExtResource( 2 )]
+invert = true
+texture_scale = 0.25
+
+[node name="Path2D" parent="Block2" index="0"]
+curve = SubResource( 2 )
+
+[editable path="Block"]
+[editable path="Block2"]
