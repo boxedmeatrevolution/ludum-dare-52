@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://entities/fruit.tscn" type="PackedScene" id=1]
 [ext_resource path="res://entities/player_ship.tscn" type="PackedScene" id=2]
 [ext_resource path="res://entities/block.tscn" type="PackedScene" id=3]
 [ext_resource path="res://entities/player.tscn" type="PackedScene" id=4]
+[ext_resource path="res://entities/thorn.tscn" type="PackedScene" id=5]
 
 [sub_resource type="Curve2D" id=1]
 _data = {
@@ -14,12 +15,16 @@ _data = {
 
 [node name="Ship" parent="." instance=ExtResource( 2 )]
 position = Vector2( 673, 691 )
+rotation = -0.748746
 
 [node name="Player" parent="." instance=ExtResource( 4 )]
-position = Vector2( 672, 251 )
+position = Vector2( 574, 403 )
 
 [node name="Fruit" parent="." instance=ExtResource( 1 )]
 position = Vector2( 667, 383 )
+
+[node name="Thorn" parent="." instance=ExtResource( 5 )]
+position = Vector2( 899, 583 )
 
 [node name="Block" parent="." instance=ExtResource( 3 )]
 invert = true
