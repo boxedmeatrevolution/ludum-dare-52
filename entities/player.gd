@@ -1,6 +1,7 @@
 extends Node2D
 
 const Block := preload("res://entities/block.gd")
+const BubbleDropletEffectScene := preload("res://entities/bubble_droplet_effect.tscn")
 
 enum State {
 	STAND,
@@ -28,6 +29,8 @@ const PERFECT_DASH_TIME := 0.3
 
 onready var sprite := $Sprite
 onready var animation_player := $AnimationPlayer
+onready var bubble_effect := $BubbleEffect
+onready var bubble_animation_player := $BubbleEffect/AnimationPlayer
 
 var state: int = State.STAND
 
@@ -211,6 +214,15 @@ func _physics_process(delta: float) -> void:
 			if abs(slide_velocity) > max_speed:
 				slide_velocity = sign(slide_velocity) * max_speed
 			sprite.flip_h = (slide_velocity < 0.0)
+			bubble_effect.rotation = get_rotation()
+			bubble_animation_player.play("main")
+			var num_droplets := 8
+			for i in num_droplets:
+				var lambda := float(i) / (num_droplets - 1)
+				var bubble_droplet := BubbleDropletEffectScene.instance()
+				bubble_droplet.angle = lerp(-0.5 * PI, 0.5 * PI, lambda)
+				bubble_droplet.position = Vector2.ZERO
+				bubble_effect.add_child(bubble_droplet)
 		else:
 			position = next_position
 
