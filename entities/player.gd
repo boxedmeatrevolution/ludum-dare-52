@@ -11,6 +11,8 @@ const DASH_SPEED := 600
 
 onready var sprite := $Sprite
 onready var animation_player := $AnimationPlayer
+onready var dash_stream := $DashStream
+onready var land_stream := $LandStream
 
 var state : int = State.STAND
 
@@ -38,6 +40,7 @@ func _physics_process(delta: float) -> void:
 				dash_velocity = DASH_SPEED * target_direction
 				position += dash_velocity * delta + 1.0 * normal
 				rotate_around_rotation_offset(dash_velocity.angle() + 0.5 * PI)
+				dash_stream.play()
 	elif state == State.DASH:
 		if dash_velocity.angle() + 0.5 * PI != sprite.rotation:
 			rotate_around_rotation_offset(dash_velocity.angle() + 0.5 * PI)
@@ -57,6 +60,7 @@ func _physics_process(delta: float) -> void:
 			position = segment.a + stand_block.position + stand_position * (segment.b - segment.a).normalized()
 			var normal := get_normal()
 			sprite.rotation = normal.angle() + 0.5 * PI
+			land_stream.play()
 		else:
 			position = next_position
 
