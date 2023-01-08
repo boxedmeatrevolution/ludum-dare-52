@@ -18,6 +18,9 @@ var stand_block : Block = null
 var stand_segment_idx := 0
 var stand_position := 0.0
 var dash_velocity := Vector2.ZERO
+var target_direction := Vector2.ZERO
+var rotation_offset := 30.0
+var head_collision_offset := 60.0
 
 func _ready() -> void:
 	state = State.DASH
@@ -25,23 +28,23 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	if state == State.STAND:
-		var segment : SegmentShape2D = stand_block.segments[stand_segment_idx]
-		var normal := stand_block.dir * (segment.b - segment.a).normalized().rotated(-0.5 * PI)
-		sprite.rotation = normal.angle() + 0.5 * PI
+		var normal = rotate_to_stand_on_stand_block()
 		if Input.is_action_just_released("dash"):
-			var target_direction := (get_global_mouse_position() - position).normalized()
-			if target_direction.dot(normal) > 0.0:
+			target_direction = (get_global_mouse_position() - position - rotation_offset_vector()).normalized()
+			if target_direction.dot(normal) > -0.8:
 				state = State.DASH
 				animation_player.play("dash")
 				dash_velocity = DASH_SPEED * target_direction
 				position += dash_velocity * delta + 1.0 * normal
+				rotate_around_rotation_offset(dash_velocity.angle() + 0.5 * PI)
 	elif state == State.DASH:
-		sprite.rotation = dash_velocity.angle() + 0.5 * PI
+		if dash_velocity.angle() + 0.5 * PI != sprite.rotation:
+			rotate_around_rotation_offset(dash_velocity.angle() + 0.5 * PI)
 		var space_state := get_world_2d().direct_space_state
 		var delta_position := dash_velocity * delta
 		var next_position := position + delta_position
 		var mask := 0b0000000000000010
-		var raycast := space_state.intersect_ray(position, next_position, [], mask)
+		var raycast := space_state.intersect_ray(position, next_position + target_direction * head_collision_offset, [], mask)
 		if raycast:
 			position = raycast.position
 			state = State.STAND
@@ -51,5 +54,23 @@ func _physics_process(delta: float) -> void:
 			var segment : SegmentShape2D = stand_block.segments[stand_segment_idx]
 			stand_position = (position - segment.a - stand_block.position).dot((segment.b - segment.a).normalized())
 			position = segment.a + stand_block.position + stand_position * (segment.b - segment.a).normalized()
+			rotate_to_stand_on_stand_block()
 		else:
 			position = next_position
+
+func rotate_to_stand_on_stand_block() -> Vector2:
+	var segment : SegmentShape2D = stand_block.segments[stand_segment_idx]
+	var normal := stand_block.dir * (segment.b - segment.a).normalized().rotated(-0.5 * PI)
+	sprite.rotation = normal.angle() + 0.5 * PI
+	return normal
+
+func rotation_offset_vector() -> Vector2:
+	return Vector2(0, -rotation_offset).rotated(sprite.rotation)
+
+func rotate_around_rotation_offset(rot: float) -> void:
+	var angle = rot - sprite.rotation
+	var offset = rotation_offset_vector()
+	var delta = offset - offset.rotated(angle)
+	sprite.rotation = rot
+	position += delta
+
