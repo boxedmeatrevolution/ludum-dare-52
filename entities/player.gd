@@ -12,7 +12,7 @@ const BLOCK_MASK := 0b0000000000000010
 
 const DASH_SPEED := 600.0
 const SLIDE_SPEED_ICE := 400.0
-const SLIDE_SMOOTH_CROSS := 0.5
+const SLIDE_SMOOTH_CROSS := 0.9
 const SLIDE_FRICTION := 8#800.0
 const SLIDE_FRICTION_ICE := 5#800.0
 const DASH_MIN_UPWARDNESS := -0.8
@@ -93,6 +93,7 @@ func _physics_process(delta: float) -> void:
 						stand_block = new_stand_block
 						stand_segment_idx = new_stand_segment_idx
 						stand_position = convert_pos_global_to_seg(stand_block, stand_segment_idx, raycast.position)
+						stand_position += 1.0 * sign(slide_velocity)
 						#slide_velocity *= get_tangent().dot(old_tangent)
 						next_position = convert_pos_seg_to_global(stand_block, stand_segment_idx, stand_position)
 						max_distance -= (next_position - position).length()

@@ -48,6 +48,16 @@ func _ready() -> void:
 	polygon = curve.tessellate(5, 4)
 	polygon.remove(polygon.size() - 1)
 	
+	# Remove any duplicate neighbouring points.
+	var idx = 0
+	while idx < polygon.size():
+		var prev : Vector2 = polygon[idx]
+		var next : Vector2 = polygon[(idx + 1) % polygon.size()]
+		if prev == next:
+			polygon.remove(idx)
+		else:
+			idx += 1
+	
 	# Check the orientation.
 	var angle := 0.0
 	var perimeter := 0.0
@@ -78,7 +88,7 @@ func _ready() -> void:
 		var tangent_2 : Vector2 = (next - current).normalized()
 		var normal_1 := Vector2(tangent_1.y, -tangent_1.x)
 		var normal_2 := Vector2(tangent_2.y, -tangent_2.x)
-		var offset := tangent_1 / (normal_2.dot(tangent_1)) + tangent_2 / (normal_1.dot(tangent_2))
+		var offset := (normal_1 + normal_2) / (1.0 + normal_1.dot(normal_2))
 		polygon_inner.append(current + 0.5 * texture_scale * texture.get_height() * offset)
 		polygon_outer.append(current - 0.5 * texture_scale * texture.get_height() * offset)
 	
