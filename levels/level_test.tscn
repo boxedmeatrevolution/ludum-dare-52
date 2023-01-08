@@ -21,6 +21,7 @@ position = Vector2( 366, 178 )
 
 [node name="Block" parent="." instance=ExtResource( 1 )]
 position = Vector2( 180, 331 )
+ice = true
 
 [node name="Path2D" parent="Block" index="0"]
 curve = SubResource( 1 )
@@ -28,6 +29,7 @@ curve = SubResource( 1 )
 [node name="Block2" parent="." instance=ExtResource( 1 )]
 position = Vector2( -18, 45 )
 texture = ExtResource( 3 )
+texture_scale = 0.5
 
 [node name="Path2D" parent="Block2" index="0"]
 curve = SubResource( 2 )

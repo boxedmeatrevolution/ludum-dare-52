@@ -1,8 +1,11 @@
 extends StaticBody2D
 
+const ICE_TEXTURE := preload("res://sprites/ice.png")
+
 export var invert := false
 export var texture : Texture = null
 export var texture_scale := 1.0
+export var ice := false
 
 onready var path := $Path2D
 onready var mesh_interior := $PolygonInterior
@@ -14,6 +17,10 @@ var polygon_outer: PoolVector2Array
 var segments: Array
 
 func _ready() -> void:
+	# Overwrite texture for ice.
+	if ice:
+		texture = ICE_TEXTURE
+	
 	# Close the curve by averaging first and last points.
 	var curve : Curve2D = path.curve
 	var count := curve.get_point_count()
