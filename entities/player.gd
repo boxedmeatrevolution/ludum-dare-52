@@ -7,7 +7,7 @@ enum State {
 	DASH,
 }
 
-const DASH_SPEED := 400
+const DASH_SPEED := 600
 
 onready var sprite := $Sprite
 onready var animation_player := $AnimationPlayer
