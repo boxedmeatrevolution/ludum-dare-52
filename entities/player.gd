@@ -9,6 +9,8 @@ enum State {
 }
 
 const BLOCK_MASK := 0b0000000000000010
+const FRUIT_MASK := 0b0000000000000100
+const HAZARD_MASK := 0b000000000001000
 
 const DASH_SPEED := 600.0
 const SLIDE_SPEED_ICE := 400.0
@@ -226,16 +228,14 @@ func rotate_around_rotation_offset(rot: float) -> void:
 
 func handle_fruit_collisions() -> void:
 	var space_state := get_world_2d().direct_space_state
-	var mask := 0b0000000000000100 #Fruit
-	var collisions := space_state.intersect_point(position + head_collision_offset_vector(), 32, [], mask, false, true)
+	var collisions := space_state.intersect_point(position + head_collision_offset_vector(), 32, [], FRUIT_MASK, false, true)
 	for collision in collisions:
 		var fruit = collision.collider.get_parent()
 		fruit.harvest()
 
 func handle_hazard_collisions() -> void:
 	var space_state := get_world_2d().direct_space_state
-	var mask := 0b0000000000001000 #hazard
-	var collisions := space_state.intersect_point(position + head_collision_offset_vector(), 32, [], mask, false, true)
+	var collisions := space_state.intersect_point(position + head_collision_offset_vector(), 32, [], HAZARD_MASK, false, true)
 	for collision in collisions:
 		print("Oh I have been slain!")
 		var hazard = collision.collider.get_parent()

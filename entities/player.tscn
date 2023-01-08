@@ -1,7 +1,11 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://sprites/player.png" type="Texture" id=1]
 [ext_resource path="res://entities/player.gd" type="Script" id=2]
+
+[sub_resource type="CircleShape2D" id=5]
+
+[sub_resource type="CircleShape2D" id=6]
 
 [sub_resource type="Animation" id=2]
 length = 0.001
@@ -75,6 +79,18 @@ script = ExtResource( 2 )
 texture = ExtResource( 1 )
 offset = Vector2( 0, -28 )
 hframes = 8
+
+[node name="HitBox" type="Area2D" parent="Sprite"]
+position = Vector2( 1, -41 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Sprite/HitBox"]
+shape = SubResource( 5 )
+
+[node name="HurtBox" type="Area2D" parent="Sprite"]
+position = Vector2( 1, -41 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Sprite/HurtBox"]
+shape = SubResource( 6 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/RESET = SubResource( 2 )
