@@ -1,0 +1,30 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://entities/fruit.tscn" type="PackedScene" id=1]
+[ext_resource path="res://entities/player_ship.tscn" type="PackedScene" id=2]
+[ext_resource path="res://entities/block.tscn" type="PackedScene" id=3]
+[ext_resource path="res://entities/player.tscn" type="PackedScene" id=4]
+
+[sub_resource type="Curve2D" id=1]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 659, 21, 0, 0, 0, 0, 97, 24, 2.19973, -52.0602, -2.19973, 52.0602, 37, 68, 0, 0, 0, 0, 34, 705, -40.3283, -0.733242, 40.3283, 0.733242, 69, 746, -57.9261, 3.66621, 57.9261, -3.66621, 1292, 739, 0, 0, 0, 0, 1346, 685, 0.733242, 63.7921, -0.733242, -63.7921, 1343, 82, 0, 0, 0, 0, 1283, 21, 0, 0, 0, 0, 659, 21 )
+}
+
+[node name="Level1" type="Node2D"]
+
+[node name="Ship" parent="." instance=ExtResource( 2 )]
+position = Vector2( 673, 691 )
+
+[node name="Player" parent="." instance=ExtResource( 4 )]
+position = Vector2( 672, 251 )
+
+[node name="Fruit" parent="." instance=ExtResource( 1 )]
+position = Vector2( 667, 383 )
+
+[node name="Block" parent="." instance=ExtResource( 3 )]
+invert = true
+
+[node name="Path2D" parent="Block" index="0"]
+curve = SubResource( 1 )
+
+[editable path="Block"]

@@ -9,10 +9,14 @@ enum State {
 	DASH,
 	SLIDE,
 }
-
-const BLOCK_MASK := 0b0000000000000010
-const FRUIT_MASK := 0b0000000000000100
-const HAZARD_MASK := 0b000000000001000
+const BLOCK_BIT := 1
+const BLOCK_MASK :=  0b0000000000000010
+const FRUIT_BIT := 2
+const FRUIT_MASK :=  0b0000000000000100
+const HAZARD_BIT := 3
+const HAZARD_MASK := 0b0000000000001000
+const DOOR_BIT := 4
+const DOOR_MASK :=   0b0000000000010000
 
 const DASH_STEER_STRENGTH := 0.3#0.6
 const DASH_STEER_SENSITIVITY := 1.0 / 200.0
@@ -286,8 +290,12 @@ func rotate_around_rotation_offset(rot: float) -> void:
 	position += delta
 
 func _on_HitBox_area_entered(area: Area2D) -> void:
-	var fruit = area.get_parent();
-	fruit.harvest()
+	if area.get_collision_layer_bit(FRUIT_BIT):
+		var fruit = area.get_parent()
+		fruit.harvest()
+	elif area.get_collision_layer_bit(DOOR_BIT):
+		$"/root/GameController".try_enter_door()
+
 
 func _on_HurtBox_area_entered(area: Area2D) -> void:
 	print("Oh I have been slain");

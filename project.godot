@@ -24,6 +24,11 @@ window/size/width=1366
 window/size/height=768
 window/size/resizable=false
 
+[global]
+
+laye=false
+layer=false
+
 [input]
 
 dash={
@@ -39,6 +44,7 @@ dash={
 2d_physics/layer_2="blocks"
 2d_physics/layer_3="fruits"
 2d_physics/layer_4="hazards"
+2d_physics/layer_5="doors"
 
 [physics]
 
