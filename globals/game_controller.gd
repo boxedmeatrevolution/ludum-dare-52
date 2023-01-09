@@ -22,7 +22,6 @@ func _ready() -> void:
 	if loaded_level_idx != -1:
 		current_level_idx = loaded_level_idx
 	
-	
 func _process(delta: float) -> void:
 	if spawn_player_next_tick:
 		spawn_player_next_tick = false
