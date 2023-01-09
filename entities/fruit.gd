@@ -5,6 +5,7 @@ var time := 0.0
 
 func _ready() -> void:
 	$"/root/GameController".num_fruits_remaining += 1
+	$Sprite.frame = $"/root/GameController".fruit_type
 
 
 func _process(delta: float) -> void:

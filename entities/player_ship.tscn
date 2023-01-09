@@ -11,7 +11,9 @@ radius = 15.0
 script = ExtResource( 2 )
 
 [node name="Sprite" type="Sprite" parent="."]
+scale = Vector2( 0.6, 0.6 )
 texture = ExtResource( 1 )
+offset = Vector2( 0, -16 )
 
 [node name="Door" type="Area2D" parent="."]
 collision_layer = 16
