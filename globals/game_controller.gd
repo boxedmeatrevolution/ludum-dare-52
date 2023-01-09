@@ -34,7 +34,6 @@ func _ready() -> void:
 	var loaded_level_idx = levels.find(loaded_level_path)
 	if loaded_level_idx != -1:
 		current_level_idx = loaded_level_idx
-		load_level(current_level_idx)
 	
 func _process(delta: float) -> void:
 	if spawn_player_next_tick:
