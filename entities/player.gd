@@ -56,11 +56,9 @@ var dash_input_timer := 0.0
 func _ready() -> void:
 	state = State.DASH
 	dash_velocity = DASH_SPEED * Vector2.RIGHT
+	$"/root/GameController".player = self
 
 func _physics_process(delta: float) -> void:
-	if $"/root/GameController".is_level_complete:
-		queue_free()
-	
 	if dash_input_timer > 0.0:
 		dash_input_timer -= delta
 	if Input.is_action_just_pressed("dash"):
