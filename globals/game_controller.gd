@@ -3,11 +3,13 @@ extends Node
 const TIME_TO_RESET_AFTER_DEATH := 0.6
 const TIME_TO_LOAD_NEXT_LEVEL := 3.0
 
+var spawn_player_next_tick := true
 var current_level_idx := -1
 var levels := ["res://levels/level_1.tscn", "res://levels/level_2.tscn"]
 
 var num_fruits_remaining := 0
 var spaceship = null
+var player = null
 
 var is_player_dead := false
 var is_level_complete := false
@@ -22,6 +24,13 @@ func _ready() -> void:
 	
 	
 func _process(delta: float) -> void:
+	if spawn_player_next_tick:
+		spawn_player_next_tick = false
+		if spaceship and player and is_instance_valid(spaceship) and is_instance_valid(player):
+			player.position = spaceship.position
+			player.rotation = spaceship.rotation
+			player.dash_velocity = Vector2(0.0, -1000.0).rotated(player.rotation + PI)
+			
 	if is_level_complete and current_level_idx < levels.size() - 1:
 		level_complete_timer += delta
 		if level_complete_timer > TIME_TO_LOAD_NEXT_LEVEL:
@@ -34,19 +43,21 @@ func _process(delta: float) -> void:
 func try_enter_door() -> void:
 	if num_fruits_remaining <= 0:
 		is_level_complete = true
-		if spaceship:
+		if player and is_instance_valid(player):
+			player.queue_free()
+		if spaceship and is_instance_valid(spaceship):
 			spaceship.launch()
-	else:
-		print("Not enough fruit")
 
 func trigger_player_death() -> void:
 	is_player_dead = true
 	player_death_timer = 0
 
 func load_level(level_idx: int) -> void:
+	spawn_player_next_tick = true
 	is_player_dead = false
 	is_level_complete = false
 	num_fruits_remaining = 0
 	player_death_timer = 0
 	level_complete_timer = 0
 	get_tree().change_scene(levels[level_idx])
+
