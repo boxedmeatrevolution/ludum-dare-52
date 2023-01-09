@@ -79,6 +79,8 @@ func _ready() -> void:
 	$"/root/GameController".timer = timer
 
 func _physics_process(delta: float) -> void:
+	if Input.is_action_just_pressed("restart"):
+		_on_HurtBox_area_entered(null)
 	if position.x < -32.0 || position.x > 1366.0 + 32.0 || position.y < -32.0 || position.y > 768.0 + 32.0:
 		_on_HurtBox_area_entered(null)
 	if !add_timer:
