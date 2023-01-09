@@ -5,6 +5,7 @@ const BubbleEffectScene := preload("res://entities/bubble_effect.tscn")
 const FruitDashEffectScene := preload("res://entities/fruit_dash_effect.tscn")
 const LaunchEffectScene := preload("res://entities/launch_effect.tscn")
 const PlayerDeadScene := preload("res://entities/player_dead.tscn")
+const TimerScene := preload("res://entities/timer.tscn")
 
 enum State {
 	STAND,
@@ -54,6 +55,7 @@ var dash_velocity := Vector2.ZERO
 var dash_chain := 0
 var perfect_dash_timer := 0.0
 var fruit_dash_timer := 0.0
+var add_timer := false
 
 const DASH_INPUT_TIME := 0.1
 var dash_input_timer := 0.0
@@ -61,9 +63,18 @@ var dash_input_timer := 0.0
 func _ready() -> void:
 	state = State.DASH
 	dash_velocity = DASH_SPEED * Vector2.RIGHT
+	var timer := TimerScene.instance()
+	timer.player = self
+	timer.time_left = 15.0
+	timer.position.x = 50.0 + 72.5
+	timer.position.y = 768 - 15 - 50.0
 	$"/root/GameController".player = self
+	$"/root/GameController".timer = timer
 
 func _physics_process(delta: float) -> void:
+	if !add_timer:
+		add_timer = true
+		get_parent().add_child($"/root/GameController".timer)
 	skate_particles.emitting = (state == State.SLIDE && abs(slide_velocity) == SLIDE_SPEED_ICE)
 	if dash_input_timer > 0.0:
 		dash_input_timer -= delta
