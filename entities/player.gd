@@ -158,7 +158,7 @@ func _physics_process(delta: float) -> void:
 						dash_particles.emitting = true
 						dash_effect_sprite.visible = true
 						animation_player.play("dash")
-						dash_velocity = slide_velocity * old_tangent
+						dash_velocity = sign(slide_velocity) * DASH_SPEED * old_tangent
 						position += dash_velocity * delta + 1.0 * old_normal
 						rotate_around_rotation_offset(dash_velocity.angle() + 0.5 * PI)
 						state = State.DASH
@@ -197,7 +197,7 @@ func _physics_process(delta: float) -> void:
 						dash_particles.emitting = true
 						dash_effect_sprite.visible = true
 						animation_player.play("dash")
-						dash_velocity = slide_velocity * old_tangent
+						dash_velocity = sign(slide_velocity) * DASH_SPEED * old_tangent
 						position += dash_velocity * delta + 1.0 * old_normal
 						rotate_around_rotation_offset(dash_velocity.angle() + 0.5 * PI)
 						state = State.DASH
@@ -244,6 +244,8 @@ func _physics_process(delta: float) -> void:
 			stand_position = convert_pos_global_to_seg(stand_block, stand_segment_idx, raycast.position)
 			position = convert_pos_seg_to_global(stand_block, stand_segment_idx, stand_position)
 			var slide_velocity_factor := get_tangent().dot(dash_velocity.normalized())
+			if abs(slide_velocity_factor) > 0.25:
+				slide_velocity_factor = sign(slide_velocity_factor) * 1.0
 			slide_velocity = dash_velocity.length() * slide_velocity_factor
 			var max_speed := SLIDE_SPEED_ICE
 			if abs(slide_velocity) > max_speed:
