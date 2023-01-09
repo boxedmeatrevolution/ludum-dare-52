@@ -258,7 +258,7 @@ func _physics_process(delta: float) -> void:
 				dash_particles.emitting = true
 				animation_player.play("dash")
 				rotate_around_rotation_offset(dash_velocity.angle() + 0.5 * PI)
-				dash_velocity = 0.01 * (DASH_SPEED + tanh(dash_chain / 4) * DASH_CHAIN_SPEED) * target_direction
+				dash_velocity = (DASH_SPEED + tanh(dash_chain / 4) * DASH_CHAIN_SPEED) * target_direction
 				dash_chain += 1
 				var launch_effect := LaunchEffectScene.instance()
 				launch_effect.rotation = get_rotation()
