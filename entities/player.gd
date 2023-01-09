@@ -43,6 +43,7 @@ onready var dash_effect := $DashEffect
 onready var dash_effect_sprite := $DashEffect/Sprite
 onready var fruit_particles := $Sprite/FruitEffect/Particles2D
 onready var skate_particles := $Sprite/SkateEffect/Particles2D
+var timer = null
 
 onready var dash_stream := $DashStream
 onready var land_stream := $LandStream
@@ -69,7 +70,7 @@ var dash_input_timer := 0.0
 func _ready() -> void:
 	state = State.DASH
 	dash_velocity = DASH_SPEED * Vector2.RIGHT
-	var timer := TimerScene.instance()
+	timer = TimerScene.instance()
 	timer.player = self
 	timer.time_left = $"/root/GameController".level_time[$"/root/GameController".current_level_idx]
 	timer.position.x = 50.0 + 72.5
@@ -372,7 +373,8 @@ func _on_HitBox_area_entered(area: Area2D) -> void:
 		fruit_position = fruit.position
 		harvest_stream.play()
 	elif area.get_collision_layer_bit(DOOR_BIT):
-		$"/root/GameController".try_enter_door()
+		if $"/root/GameController".try_enter_door():
+			timer.finished()
 
 func angle_difference(angle_1: float, angle_2: float) -> float:
 	if angle_1 > angle_2:

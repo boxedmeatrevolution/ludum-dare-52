@@ -4,11 +4,14 @@ var time_left := 10.00
 var time := 0.0
 var player = null
 onready var label := $Node2D/Label
+var finished_bit := false
 
 func _ready():
 	time = time_left
 
 func _process(delta : float) -> void:
+	if finished_bit:
+		return
 	time -= delta
 	if time < 0.0:
 		label.text = "DE:AD"
@@ -38,6 +41,12 @@ func _process(delta : float) -> void:
 	elif time < 5.0:
 		label.add_color_override("font_color", Color.yellow)
 	label.text = seconds_str + ":" + fraction_str.pad_zeros(2)
+
+func finished() -> void:
+	label.add_color_override("font_color", Color.white)
+	scale.x = 1.0
+	scale.y = 1.0
+	finished_bit = true
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):

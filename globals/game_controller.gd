@@ -56,13 +56,17 @@ func _process(delta: float) -> void:
 		if player_death_timer > TIME_TO_RESET_AFTER_DEATH:
 			load_level(current_level_idx)
 	
-func try_enter_door() -> void:
+func try_enter_door() -> bool:
 	if num_fruits_remaining <= 0:
 		is_level_complete = true
 		if player and is_instance_valid(player):
 			player.queue_free()
 		if spaceship and is_instance_valid(spaceship):
+			var p : Node = spaceship.get_parent()
+			p.move_child(spaceship, p.get_child_count() - 1)
 			spaceship.launch()
+		return true
+	return false
 
 func trigger_player_death() -> void:
 	is_player_dead = true
