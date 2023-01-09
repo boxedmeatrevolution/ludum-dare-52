@@ -9,6 +9,7 @@ var levels := [
 	"res://levels/level_1.tscn", 
 	"res://levels/level_2.tscn",
 	"res://levels/level_3.tscn",
+	"res://levels/level_4.tscn",
 ]
 
 var num_fruits_remaining := 0
