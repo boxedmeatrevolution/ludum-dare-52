@@ -18,7 +18,7 @@ const HAZARD_MASK := 0b0000000000001000
 const DOOR_BIT := 4
 const DOOR_MASK :=   0b0000000000010000
 
-const FRUIT_DASH_TIME := 0.1
+const FRUIT_DASH_TIME := 0.2
 const DASH_STEER_STRENGTH := 0.3#0.6
 const DASH_STEER_SENSITIVITY := 1.0 / 200.0
 const DASH_SPEED := 350.0#600.0
@@ -255,15 +255,15 @@ func _physics_process(delta: float) -> void:
 			if input_dash_check() && fruit_dash_timer > 0.0:
 				fruit_dash_timer = 0.0
 				var target_direction := input_target_position()
-				var launch_effect := LaunchEffectScene.instance()
-				get_parent().add_child(launch_effect)
-				launch_effect.rotation = get_rotation()
-				launch_effect.position = position
 				dash_particles.emitting = true
 				animation_player.play("dash")
-				dash_velocity = (DASH_SPEED + tanh(dash_chain / 4) * DASH_CHAIN_SPEED) * target_direction
 				rotate_around_rotation_offset(dash_velocity.angle() + 0.5 * PI)
+				dash_velocity = 0.01 * (DASH_SPEED + tanh(dash_chain / 4) * DASH_CHAIN_SPEED) * target_direction
 				dash_chain += 1
+				var launch_effect := LaunchEffectScene.instance()
+				launch_effect.rotation = get_rotation()
+				launch_effect.position = position
+				get_parent().add_child(launch_effect)
 
 func input_dash_check() -> bool:
 	return dash_input_timer > 0.0
