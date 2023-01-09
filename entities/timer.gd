@@ -5,6 +5,7 @@ var time := 0.0
 var player = null
 onready var label := $Node2D/Label
 var finished_bit := false
+var started := false
 
 func _ready():
 	time = time_left
@@ -12,7 +13,8 @@ func _ready():
 func _process(delta : float) -> void:
 	if finished_bit:
 		return
-	time -= delta
+	if started:
+		time -= delta
 	if time < 0.0:
 		label.text = "DE:AD"
 		scale.x = 1.5
@@ -47,6 +49,9 @@ func finished() -> void:
 	scale.x = 1.0
 	scale.y = 1.0
 	finished_bit = true
+	
+func start() -> void:
+	started = true
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):

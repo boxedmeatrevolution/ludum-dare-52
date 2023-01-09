@@ -12,15 +12,32 @@ var levels := [
 	"res://levels/level_4.tscn",
 	"res://levels/level_5.tscn",
 	"res://levels/level_6.tscn",
+	"res://levels/level_1.tscn", 
+	"res://levels/level_2.tscn",
+	"res://levels/level_3.tscn",
+	"res://levels/level_4.tscn",
+	"res://levels/level_5.tscn",
+	"res://levels/level_6.tscn",
 	"res://levels/game_finished.tscn"
 ]
 var level_time := [
-	45,
-	25,
-	25,
-	25,
-	25,
-	25,
+	20,
+	20,
+	14,
+	19,
+	19,
+	
+	14,
+	
+	18,
+	
+	14,
+	14,
+	10,
+	13,
+	14,
+	14,
+	
 	100000,
 ]
 

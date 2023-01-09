@@ -122,6 +122,7 @@ func _physics_process(delta: float) -> void:
 				position += dash_velocity * delta + 1.0 * normal
 				rotate_around_rotation_offset(dash_velocity.angle() + 0.5 * PI)
 				state = State.DASH
+				timer.start()
 				dash_chain += 1
 				play_dash_stream()
 	elif state == State.SLIDE:
@@ -195,6 +196,7 @@ func _physics_process(delta: float) -> void:
 						position += dash_velocity * delta + 1.0 * old_normal
 						rotate_around_rotation_offset(dash_velocity.angle() + 0.5 * PI)
 						state = State.DASH
+						timer.start()
 						play_dash_stream()
 				elif edge_distance < max_distance:
 					var old_tangent := get_tangent()
@@ -235,6 +237,7 @@ func _physics_process(delta: float) -> void:
 						position += dash_velocity * delta + 1.0 * old_normal
 						rotate_around_rotation_offset(dash_velocity.angle() + 0.5 * PI)
 						state = State.DASH
+						timer.start()
 						play_dash_stream()
 				else:
 					stand_position = next_stand_position
@@ -254,6 +257,7 @@ func _physics_process(delta: float) -> void:
 				position += dash_velocity * delta + 1.0 * normal
 				rotate_around_rotation_offset(dash_velocity.angle() + 0.5 * PI)
 				state = State.DASH
+				timer.start()
 				dash_chain += 1
 				play_dash_stream()
 	elif state == State.DASH:
