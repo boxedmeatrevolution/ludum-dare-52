@@ -36,6 +36,7 @@ onready var sprite := $Sprite
 onready var animation_player := $AnimationPlayer
 onready var bubble_effect := $BubbleEffect
 onready var bubble_animation_player := $BubbleEffect/AnimationPlayer
+onready var dash_particles := $DashEffect/Particles2D
 
 var state: int = State.STAND
 
@@ -77,16 +78,17 @@ func _physics_process(delta: float) -> void:
 		if input_dash_check():
 			var target_direction = input_target_position()
 			if target_direction.dot(normal) > DASH_MIN_UPWARDNESS:
+				var launch_effect := LaunchEffectScene.instance()
+				get_parent().add_child(launch_effect)
+				launch_effect.rotation = get_rotation()
+				launch_effect.position = position
+				dash_particles.emitting = true
 				animation_player.play("dash")
 				dash_velocity = (DASH_SPEED + tanh(dash_chain / 4) * DASH_CHAIN_SPEED) * target_direction
 				position += dash_velocity * delta + 1.0 * normal
 				rotate_around_rotation_offset(dash_velocity.angle() + 0.5 * PI)
 				state = State.DASH
 				dash_chain += 1
-				var launch_effect := LaunchEffectScene.instance()
-				get_parent().add_child_below_node(self, launch_effect)
-				launch_effect.rotation = get_rotation()
-				launch_effect.position = position
 	elif state == State.SLIDE:
 		var normal := get_normal()
 		var target_rotation := normal.angle() + 0.5 * PI
@@ -146,6 +148,7 @@ func _physics_process(delta: float) -> void:
 						slide_velocity = 0.0
 						max_distance = 0.0
 					else:
+						dash_particles.emitting = true
 						animation_player.play("dash")
 						dash_velocity = slide_velocity * old_tangent
 						position += dash_velocity * delta + 1.0 * old_normal
@@ -183,6 +186,7 @@ func _physics_process(delta: float) -> void:
 						slide_velocity = 0.0
 						max_distance = 0.0
 					else:
+						dash_particles.emitting = true
 						animation_player.play("dash")
 						dash_velocity = slide_velocity * old_tangent
 						position += dash_velocity * delta + 1.0 * old_normal
@@ -195,16 +199,17 @@ func _physics_process(delta: float) -> void:
 		if input_dash_check():
 			var target_direction := input_target_position()
 			if target_direction.dot(normal) > DASH_MIN_UPWARDNESS:
+				var launch_effect := LaunchEffectScene.instance()
+				get_parent().add_child(launch_effect)
+				launch_effect.rotation = get_rotation()
+				launch_effect.position = position
+				dash_particles.emitting = true
 				animation_player.play("dash")
 				dash_velocity = (DASH_SPEED + tanh(dash_chain / 4) * DASH_CHAIN_SPEED) * target_direction
 				position += dash_velocity * delta + 1.0 * normal
 				rotate_around_rotation_offset(dash_velocity.angle() + 0.5 * PI)
 				state = State.DASH
 				dash_chain += 1
-				var launch_effect := LaunchEffectScene.instance()
-				get_parent().add_child_below_node(self, launch_effect)
-				launch_effect.rotation = get_rotation()
-				launch_effect.position = position
 	elif state == State.DASH:
 		# Angle position based on relative mouse coordinate
 		var target_delta := (get_global_mouse_position() - position - rotation_offset_vector())
@@ -217,6 +222,7 @@ func _physics_process(delta: float) -> void:
 		var next_position := position + delta_position
 		var raycast := space_state.intersect_ray(position + dash_velocity.normalized() * HEAD_COLLISION_OFFSET, next_position + dash_velocity.normalized() * HEAD_COLLISION_OFFSET, [], BLOCK_MASK)
 		if raycast:
+			dash_particles.emitting = false
 			state = State.SLIDE
 			perfect_dash_timer = PERFECT_DASH_TIME
 			animation_player.play("slide")
@@ -238,6 +244,8 @@ func _physics_process(delta: float) -> void:
 				var bubble_droplet := BubbleDropletEffectScene.instance()
 				bubble_droplet.angle = lerp(-0.5 * PI, 0.5 * PI, lambda)
 				bubble_droplet.position = Vector2.ZERO
+				if i % 2 == 1:
+					bubble_droplet.distance_2 -= 20
 				bubble_effect.add_child(bubble_droplet)
 		else:
 			position = next_position
