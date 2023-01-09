@@ -22,7 +22,7 @@ const FRUIT_DASH_TIME := 0.2
 const DASH_STEER_STRENGTH := 0.3#0.6
 const DASH_STEER_SENSITIVITY := 1.0 / 200.0
 const DASH_SPEED := 350.0#600.0
-const DASH_CHAIN_SPEED := 200.0#400.0
+const DASH_CHAIN_SPEED := 350.0#400.0
 const DASH_ACCEL := 100.0
 const SLIDE_SPEED_ICE := 300.0
 const SLIDE_SMOOTH_CROSS := 0.9
@@ -38,6 +38,8 @@ onready var animation_player := $AnimationPlayer
 onready var bubble_effect := $BubbleEffect
 onready var bubble_animation_player := $BubbleEffect/AnimationPlayer
 onready var dash_particles := $DashEffect/Particles2D
+onready var dash_effect := $DashEffect
+onready var dash_effect_sprite := $DashEffect/Sprite
 
 var state: int = State.STAND
 
@@ -86,8 +88,9 @@ func _physics_process(delta: float) -> void:
 				launch_effect.rotation = get_rotation()
 				launch_effect.position = position
 				dash_particles.emitting = true
+				dash_effect_sprite.visible = true
 				animation_player.play("dash")
-				dash_velocity = (DASH_SPEED + tanh(dash_chain / 4) * DASH_CHAIN_SPEED) * target_direction
+				dash_velocity = (DASH_SPEED + tanh(dash_chain / 4.0) * DASH_CHAIN_SPEED) * target_direction
 				position += dash_velocity * delta + 1.0 * normal
 				rotate_around_rotation_offset(dash_velocity.angle() + 0.5 * PI)
 				state = State.DASH
@@ -152,6 +155,7 @@ func _physics_process(delta: float) -> void:
 						max_distance = 0.0
 					else:
 						dash_particles.emitting = true
+						dash_effect_sprite.visible = true
 						animation_player.play("dash")
 						dash_velocity = slide_velocity * old_tangent
 						position += dash_velocity * delta + 1.0 * old_normal
@@ -190,6 +194,7 @@ func _physics_process(delta: float) -> void:
 						max_distance = 0.0
 					else:
 						dash_particles.emitting = true
+						dash_effect_sprite.visible = true
 						animation_player.play("dash")
 						dash_velocity = slide_velocity * old_tangent
 						position += dash_velocity * delta + 1.0 * old_normal
@@ -207,25 +212,29 @@ func _physics_process(delta: float) -> void:
 				launch_effect.rotation = get_rotation()
 				launch_effect.position = position
 				dash_particles.emitting = true
+				dash_effect_sprite.visible = true
 				animation_player.play("dash")
-				dash_velocity = (DASH_SPEED + tanh(dash_chain / 4) * DASH_CHAIN_SPEED) * target_direction
+				dash_velocity = (DASH_SPEED + tanh(dash_chain / 4.0) * DASH_CHAIN_SPEED) * target_direction
 				position += dash_velocity * delta + 1.0 * normal
 				rotate_around_rotation_offset(dash_velocity.angle() + 0.5 * PI)
 				state = State.DASH
 				dash_chain += 1
 	elif state == State.DASH:
+		dash_effect.modulate = lerp(Color.white, Color.red, tanh((dash_chain - 1) / 4.0))
 		# Angle position based on relative mouse coordinate
 		var target_delta := (get_global_mouse_position() - position - rotation_offset_vector())
 		var steering := -DASH_STEER_STRENGTH * tanh(target_delta.cross(dash_velocity.normalized()) * DASH_STEER_SENSITIVITY)
 		dash_velocity = dash_velocity.rotated(steering * delta)
 		dash_velocity += DASH_ACCEL * dash_velocity.normalized() * delta
 		sprite.rotation = get_rotation()
+		dash_effect.rotation = sprite.rotation
 		var space_state := get_world_2d().direct_space_state
 		var delta_position := dash_velocity * delta
 		var next_position := position + delta_position
 		var raycast := space_state.intersect_ray(position + dash_velocity.normalized() * HEAD_COLLISION_OFFSET, next_position + dash_velocity.normalized() * HEAD_COLLISION_OFFSET, [], BLOCK_MASK)
 		if raycast:
 			dash_particles.emitting = false
+			dash_effect_sprite.visible = false
 			state = State.SLIDE
 			perfect_dash_timer = PERFECT_DASH_TIME
 			animation_player.play("slide")
@@ -256,9 +265,10 @@ func _physics_process(delta: float) -> void:
 				fruit_dash_timer = 0.0
 				var target_direction := input_target_position()
 				dash_particles.emitting = true
+				dash_effect_sprite.visible = true
 				animation_player.play("dash")
 				rotate_around_rotation_offset(target_direction.angle() + 0.5 * PI)
-				dash_velocity = (DASH_SPEED + tanh(dash_chain / 4) * DASH_CHAIN_SPEED) * target_direction
+				dash_velocity = (DASH_SPEED + tanh(dash_chain / 4.0) * DASH_CHAIN_SPEED) * target_direction
 				dash_chain += 1
 				var launch_effect := LaunchEffectScene.instance()
 				launch_effect.rotation = get_rotation()
