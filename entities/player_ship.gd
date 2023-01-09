@@ -5,6 +5,8 @@ const LAUNCH_ACCEL = 10.0
 var is_launch := false
 var launch_vel := 0.0
 
+onready var launch_stream := $LaunchStream
+
 func _ready() -> void:
 	$"/root/GameController".spaceship = self
 
@@ -15,3 +17,4 @@ func _process(delta: float) -> void:
 
 func launch() -> void:
 	is_launch = true
+	launch_stream.play()
