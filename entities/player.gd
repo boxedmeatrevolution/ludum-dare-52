@@ -65,7 +65,7 @@ func _ready() -> void:
 	dash_velocity = DASH_SPEED * Vector2.RIGHT
 	var timer := TimerScene.instance()
 	timer.player = self
-	timer.time_left = 15.0
+	timer.time_left = $"/root/GameController".level_time[$"/root/GameController".current_level_idx]
 	timer.position.x = 50.0 + 72.5
 	timer.position.y = 768 - 15 - 50.0
 	$"/root/GameController".player = self

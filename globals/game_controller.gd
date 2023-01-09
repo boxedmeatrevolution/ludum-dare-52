@@ -11,6 +11,12 @@ var levels := [
 	"res://levels/level_3.tscn",
 	"res://levels/level_4.tscn",
 ]
+var level_time := [
+	15,
+	20,
+	12,
+	13
+]
 
 var num_fruits_remaining := 0
 var spaceship = null
