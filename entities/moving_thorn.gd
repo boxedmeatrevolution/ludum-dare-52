@@ -2,10 +2,12 @@ extends PathFollow2D
 
 export var period := 5.0
 export var motion_loop := false
+export var time_offset := 0.0
 
 var timer := 0.0
 
 func _ready():
+	timer = time_offset
 	pass
 
 func _physics_process(delta: float) -> void:
