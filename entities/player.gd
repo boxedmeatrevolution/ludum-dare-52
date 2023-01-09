@@ -4,6 +4,7 @@ const Block := preload("res://entities/block.gd")
 const BubbleEffectScene := preload("res://entities/bubble_effect.tscn")
 const FruitDashEffectScene := preload("res://entities/fruit_dash_effect.tscn")
 const LaunchEffectScene := preload("res://entities/launch_effect.tscn")
+const PlayerDeadScene := preload("res://entities/player_dead.tscn")
 
 enum State {
 	STAND,
@@ -347,5 +348,8 @@ func angle_difference(angle_1: float, angle_2: float) -> float:
 		return -(fmod(angle_2 - angle_1 + PI, 2 * PI) - PI)
 
 func _on_HurtBox_area_entered(area: Area2D) -> void:
+	var player_dead := PlayerDeadScene.instance()
+	get_parent().add_child_below_node(self, player_dead)
+	player_dead.position = position + rotation_offset_vector()
 	queue_free()
 	$"/root/GameController".trigger_player_death()
