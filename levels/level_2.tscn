@@ -26,6 +26,8 @@ _data = {
 [node name="Ship" parent="." instance=ExtResource( 3 )]
 position = Vector2( 108, 428 )
 
+[node name="Player" parent="." instance=ExtResource( 2 )]
+
 [node name="Block" parent="." instance=ExtResource( 1 )]
 invert = true
 
@@ -45,8 +47,6 @@ ice = true
 [node name="Path2D" parent="Block2" index="0"]
 position = Vector2( 4, 3 )
 curve = SubResource( 2 )
-
-[node name="Player" parent="." instance=ExtResource( 2 )]
 
 [node name="Fruit" parent="." instance=ExtResource( 4 )]
 position = Vector2( 298, 400 )
@@ -96,35 +96,77 @@ position = Vector2( 1153, 244 )
 [node name="Thorn2" parent="." instance=ExtResource( 5 )]
 position = Vector2( 1158, 555 )
 
+[node name="Thorn15" parent="." instance=ExtResource( 5 )]
+position = Vector2( 691, 718 )
+
 [node name="Thorn3" parent="." instance=ExtResource( 5 )]
-position = Vector2( 684, 709 )
+position = Vector2( 709, 693 )
+
+[node name="Thorn16" parent="." instance=ExtResource( 5 )]
+position = Vector2( 577, 698 )
+
+[node name="Thorn17" parent="." instance=ExtResource( 5 )]
+position = Vector2( 600, 719 )
+
+[node name="Thorn18" parent="." instance=ExtResource( 5 )]
+position = Vector2( 626, 696 )
+
+[node name="Thorn19" parent="." instance=ExtResource( 5 )]
+position = Vector2( 649, 721 )
+
+[node name="Thorn20" parent="." instance=ExtResource( 5 )]
+position = Vector2( 669, 694 )
+
+[node name="Thorn21" parent="." instance=ExtResource( 5 )]
+position = Vector2( 549, 718 )
 
 [node name="Thorn4" parent="." instance=ExtResource( 5 )]
-position = Vector2( 628, 710 )
+position = Vector2( 525, 697 )
 
 [node name="Thorn5" parent="." instance=ExtResource( 5 )]
-position = Vector2( 570, 709 )
+position = Vector2( 505, 720 )
 
 [node name="Thorn6" parent="." instance=ExtResource( 5 )]
-position = Vector2( 506, 710 )
+position = Vector2( 483, 696 )
+
+[node name="Thorn25" parent="." instance=ExtResource( 5 )]
+position = Vector2( 679, 45 )
+
+[node name="Thorn26" parent="." instance=ExtResource( 5 )]
+position = Vector2( 707, 72 )
 
 [node name="Thorn7" parent="." instance=ExtResource( 5 )]
-position = Vector2( 690, 64 )
+position = Vector2( 656, 71 )
+
+[node name="Thorn24" parent="." instance=ExtResource( 5 )]
+position = Vector2( 724, 44 )
 
 [node name="Thorn8" parent="." instance=ExtResource( 5 )]
-position = Vector2( 625, 63 )
+position = Vector2( 600, 74 )
+
+[node name="Thorn23" parent="." instance=ExtResource( 5 )]
+position = Vector2( 627, 47 )
 
 [node name="Thorn9" parent="." instance=ExtResource( 5 )]
-position = Vector2( 562, 69 )
+position = Vector2( 551, 76 )
 
 [node name="Thorn10" parent="." instance=ExtResource( 5 )]
-position = Vector2( 499, 67 )
+position = Vector2( 493, 76 )
+
+[node name="Thorn22" parent="." instance=ExtResource( 5 )]
+position = Vector2( 576, 48 )
 
 [node name="Thorn11" parent="." instance=ExtResource( 5 )]
 position = Vector2( 654, 215 )
 
 [node name="Thorn12" parent="." instance=ExtResource( 5 )]
 position = Vector2( 754, 313 )
+
+[node name="Thorn13" parent="." instance=ExtResource( 5 )]
+position = Vector2( 523, 51 )
+
+[node name="Thorn14" parent="." instance=ExtResource( 5 )]
+position = Vector2( 467, 51 )
 
 [editable path="Block"]
 [editable path="Block3"]

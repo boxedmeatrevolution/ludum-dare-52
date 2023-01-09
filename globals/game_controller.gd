@@ -9,6 +9,7 @@ var levels := [
 	"res://levels/level_1.tscn", 
 	"res://levels/level_2.tscn",
 	"res://levels/level_3.tscn",
+	"res://levels/level_4.tscn",
 ]
 
 var num_fruits_remaining := 0
@@ -33,8 +34,8 @@ func _process(delta: float) -> void:
 		spawn_player_next_tick = false
 		if spaceship and player and is_instance_valid(spaceship) and is_instance_valid(player):
 			player.position = spaceship.position
-			player.rotation = spaceship.rotation
-			player.dash_velocity = Vector2(0.0, -1000.0).rotated(player.rotation + PI)
+			#player.rotation = spaceship.rotation
+			player.dash_velocity = Vector2(0.0, -1000.0).rotated(spaceship.rotation + PI)
 			
 	if is_level_complete and current_level_idx < levels.size() - 1:
 		level_complete_timer += delta
