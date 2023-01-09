@@ -22,10 +22,8 @@ func _ready() -> void:
 	if !texture:
 		if ice:
 			texture = ICE_TEXTURE
-			texture_scale = 0.5
 		else:
 			texture = GRASS_TEXTURE
-			texture_scale = 0.5
 	
 	position += path.position
 	path.position = Vector2.ZERO

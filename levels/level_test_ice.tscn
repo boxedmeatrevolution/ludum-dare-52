@@ -28,7 +28,6 @@ curve = SubResource( 1 )
 
 [node name="Block2" parent="." instance=ExtResource( 2 )]
 invert = true
-texture_scale = 0.25
 
 [node name="Path2D" parent="Block2" index="0"]
 curve = SubResource( 2 )
