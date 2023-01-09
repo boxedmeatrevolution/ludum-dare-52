@@ -26,6 +26,7 @@ var num_fruits_remaining := 0
 var spaceship = null
 var player = null
 var timer = null
+var fruit_type := 1
 
 var is_player_dead := false
 var is_level_complete := false
@@ -75,4 +76,5 @@ func load_level(level_idx: int) -> void:
 	player_death_timer = 0
 	level_complete_timer = 0
 	get_tree().change_scene(levels[level_idx])
+	$"/root/GameController".fruit_type = randi() % 6
 
