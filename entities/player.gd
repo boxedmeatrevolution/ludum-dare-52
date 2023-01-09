@@ -40,6 +40,7 @@ onready var dash_particles := $DashEffect/Particles2D
 onready var dash_effect := $DashEffect
 onready var dash_effect_sprite := $DashEffect/Sprite
 onready var fruit_particles := $Sprite/FruitEffect/Particles2D
+onready var skate_particles := $Sprite/SkateEffect/Particles2D
 
 var state: int = State.STAND
 
@@ -62,6 +63,7 @@ func _ready() -> void:
 	$"/root/GameController".player = self
 
 func _physics_process(delta: float) -> void:
+	skate_particles.emitting = (state == State.SLIDE && abs(slide_velocity) == SLIDE_SPEED_ICE)
 	if dash_input_timer > 0.0:
 		dash_input_timer -= delta
 	if Input.is_action_just_pressed("dash"):
