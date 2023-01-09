@@ -78,8 +78,8 @@ func _physics_process(delta: float) -> void:
 	if state == State.STAND:
 		var normal := get_normal()
 		var target_rotation := normal.angle() + 0.5 * PI
-		var delta_rotation := fmod(sprite.rotation - target_rotation + PI, 2 * PI) - PI
-		sprite.rotation = delta_rotation * exp(-delta / 0.05) + target_rotation
+		var delta_rotation := angle_difference(target_rotation, sprite.rotation)
+		sprite.rotation += delta_rotation * (1.0 - exp(-delta / 0.05))
 		#sprite.rotation -= delta_rotation * delta / 0.1
 		if input_dash_check():
 			var target_direction = input_target_position()
@@ -99,8 +99,8 @@ func _physics_process(delta: float) -> void:
 	elif state == State.SLIDE:
 		var normal := get_normal()
 		var target_rotation := normal.angle() + 0.5 * PI
-		var delta_rotation := fmod(sprite.rotation - target_rotation + PI, 2 * PI) - PI
-		sprite.rotation = delta_rotation * exp(-delta / 0.05) + target_rotation
+		var delta_rotation := angle_difference(target_rotation, sprite.rotation)
+		sprite.rotation += delta_rotation * (1.0 - exp(-delta / 0.05))
 		#sprite.rotation -= delta_rotation * delta / 0.1
 		var friction := SLIDE_FRICTION
 		if stand_block.ice:
@@ -338,6 +338,11 @@ func _on_HitBox_area_entered(area: Area2D) -> void:
 	elif area.get_collision_layer_bit(DOOR_BIT):
 		$"/root/GameController".try_enter_door()
 
+func angle_difference(angle_1: float, angle_2: float) -> float:
+	if angle_1 > angle_2:
+		return fmod(angle_1 - angle_2 + PI, 2 * PI) - PI
+	else:
+		return -(fmod(angle_2 - angle_1 + PI, 2 * PI) - PI)
 
 func _on_HurtBox_area_entered(area: Area2D) -> void:
 	queue_free()
