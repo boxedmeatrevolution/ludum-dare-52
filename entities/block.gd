@@ -112,7 +112,7 @@ func _ready() -> void:
 		var uv_x := (distance / perimeter) * uv_max
 		indices.append(i)
 		indices.append(i + polygon.size() + 1)
-		uvs[i] = Vector2(uv_x, 0.0)
+		uvs[i] = Vector2(uv_x, 0.01)
 		uvs[i + polygon.size() + 1] = Vector2(uv_x, 1.0)
 		var prev : Vector2 = polygon[i % polygon.size()]
 		var next : Vector2 = polygon[(i + 1) % polygon.size()]
