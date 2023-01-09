@@ -1,10 +1,11 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://entities/block.tscn" type="PackedScene" id=1]
 [ext_resource path="res://entities/player_ship.tscn" type="PackedScene" id=2]
 [ext_resource path="res://entities/player.tscn" type="PackedScene" id=3]
 [ext_resource path="res://entities/thorn.tscn" type="PackedScene" id=4]
 [ext_resource path="res://entities/fruit.tscn" type="PackedScene" id=5]
+[ext_resource path="res://entities/moving_thorn.tscn" type="PackedScene" id=6]
 
 [sub_resource type="Curve2D" id=2]
 _data = {
@@ -18,19 +19,24 @@ _data = {
 
 [sub_resource type="Curve2D" id=3]
 _data = {
-"points": PoolVector2Array( 0, -69.9234, 0, 69.9234, 673, 360, 80.4932, 0, -80.4932, 0, 447, 456, 0.813063, 69.9234, -0.813063, -69.9234, 225, 363, -66.6711, 0.813063, 66.6711, -0.813063, 444, 273, -1.62613, -79.6801, 1.62613, 79.6801, 673, 360 )
+"points": PoolVector2Array( 0, -69.9234, 0, 69.9234, 673, 360, 80.4932, 0, -80.4932, 0, 447, 456, 0.813063, 69.9234, -0.813063, -69.9234, 372, 365, -66.6711, 0.813063, 66.6711, -0.813063, 444, 273, -1.62613, -79.6801, 1.62613, 79.6801, 673, 360 )
 }
 
 [sub_resource type="Curve2D" id=1]
 _data = {
-"points": PoolVector2Array( 0, 0, 0, 0, -158, 468, -3.25225, 491.903, 3.25225, -491.903, -167, 158, 0, 0, 0, 0, 210, -170, 0, 0, 0, 0, 377, -145, 0, 0, 0, 0, 452, 90, 0, 0, 0, 0, 455, 193, 0, 0, 0, 0, 314, 189, 62.6058, -47.9707, -62.6058, 47.9707, 111, 230, 0, 0, 0, 0, 45, 325, 0, 0, 0, 0, 48, 388, -56.9144, -43.9054, 56.9144, 43.9054, 110, 485, 0, 0, 0, 0, 317, 536, 0, 0, 0, 0, 463, 532, 0, 0, 0, 0, 465, 606, 0, 0, 0, 0, 385, 915, 0, 0, 0, 0, -96, 889, 0, 0, 0, 0, -158, 468 )
+"points": PoolVector2Array( 0, 0, 0, 0, -158, 468, -3.25225, 491.903, 3.25225, -491.903, -167, 158, 0, 0, 0, 0, 210, -170, 0, 0, 0, 0, 377, -145, 0, 0, 0, 0, 558, 2, 0, 0, 0, 0, 587, 186, 0, 0, 0, 0, 314, 189, 62.6058, -47.9707, -62.6058, 47.9707, 111, 230, 0, 0, 0, 0, 45, 325, 0, 0, 0, 0, 48, 388, -56.9144, -43.9054, 56.9144, 43.9054, 110, 485, 0, 0, 0, 0, 317, 536, 0, 0, 0, 0, 571, 533, 0, 0, 0, 0, 565, 748, 0, 0, 0, 0, 385, 915, 0, 0, 0, 0, -96, 889, 0, 0, 0, 0, -158, 468 )
+}
+
+[sub_resource type="Curve2D" id=5]
+_data = {
+"points": PoolVector2Array( 43.9054, -1.62612, -43.9054, 1.62612, 976, 302, -0.813062, -42.2792, 0.813062, 42.2792, 900, 392, -43.9054, 1.62612, 43.9054, -1.62612, 982, 467, 0.813062, 43.9054, -0.813062, -43.9054, 1061, 385, 42.2792, 0.813062, -42.2792, -0.813062, 976, 302 )
 }
 
 [node name="Node2D" type="Node2D"]
 
 [node name="Ship" parent="." instance=ExtResource( 2 )]
 position = Vector2( 187, 381 )
-rotation = -1.61268
+rotation = -1.55509
 
 [node name="Player" parent="." instance=ExtResource( 3 )]
 
@@ -49,7 +55,7 @@ curve = SubResource( 4 )
 [node name="Block2" parent="." instance=ExtResource( 1 )]
 
 [node name="Path2D" parent="Block2" index="0"]
-position = Vector2( 6, 18 )
+position = Vector2( -115, 18 )
 curve = SubResource( 3 )
 
 [node name="Block" parent="." instance=ExtResource( 1 )]
@@ -93,16 +99,67 @@ position = Vector2( 113, 288 )
 position = Vector2( 104, 465 )
 
 [node name="Fruit4" parent="." instance=ExtResource( 5 )]
-position = Vector2( 1053, 655 )
+position = Vector2( 1050, 658 )
 
 [node name="Fruit5" parent="." instance=ExtResource( 5 )]
-position = Vector2( 1039, 117 )
+position = Vector2( 1028, 102 )
 
 [node name="Fruit6" parent="." instance=ExtResource( 5 )]
-position = Vector2( 721, 392 )
+position = Vector2( 719, 379 )
 
 [node name="Fruit7" parent="." instance=ExtResource( 5 )]
-position = Vector2( 986, 384 )
+position = Vector2( 1035, 393 )
+
+[node name="Fruit8" parent="." instance=ExtResource( 5 )]
+position = Vector2( 556, 256 )
+
+[node name="Fruit9" parent="." instance=ExtResource( 5 )]
+position = Vector2( 560, 506 )
+
+[node name="Path2D" type="Path2D" parent="."]
+position = Vector2( 54, 9 )
+curve = SubResource( 5 )
+
+[node name="MovingThorn" parent="Path2D" instance=ExtResource( 6 )]
+position = Vector2( 976, 302 )
+rotation = 3.07211
+period = 4.0
+motion_loop = true
+
+[node name="MovingThorn2" parent="Path2D" instance=ExtResource( 6 )]
+position = Vector2( 976, 302 )
+rotation = 3.07211
+period = 4.0
+motion_loop = true
+time_offset = 0.6
+
+[node name="MovingThorn3" parent="Path2D" instance=ExtResource( 6 )]
+position = Vector2( 976, 302 )
+rotation = 3.07211
+period = 4.0
+motion_loop = true
+time_offset = 0.3
+
+[node name="MovingThorn4" parent="Path2D" instance=ExtResource( 6 )]
+position = Vector2( 976, 302 )
+rotation = 3.07211
+period = 4.0
+motion_loop = true
+time_offset = 2.3
+
+[node name="MovingThorn5" parent="Path2D" instance=ExtResource( 6 )]
+position = Vector2( 976, 302 )
+rotation = 3.07211
+period = 4.0
+motion_loop = true
+time_offset = 2.0
+
+[node name="MovingThorn6" parent="Path2D" instance=ExtResource( 6 )]
+position = Vector2( 976, 302 )
+rotation = 3.07211
+period = 4.0
+motion_loop = true
+time_offset = 2.6
 
 [editable path="Block4"]
 [editable path="Block3"]
