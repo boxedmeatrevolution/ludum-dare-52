@@ -5,7 +5,11 @@ const TIME_TO_LOAD_NEXT_LEVEL := 3.0
 
 var spawn_player_next_tick := true
 var current_level_idx := -1
-var levels := ["res://levels/level_1.tscn", "res://levels/level_2.tscn"]
+var levels := [
+	"res://levels/level_1.tscn", 
+	"res://levels/level_2.tscn",
+	"res://levels/level_3.tscn",
+]
 
 var num_fruits_remaining := 0
 var spaceship = null
