@@ -47,7 +47,6 @@ curve = SubResource( 3 )
 [node name="MovingThorn" parent="Path2D" instance=ExtResource( 4 )]
 position = Vector2( 49, -48 )
 rotation = 0.168831
-motion_loop = true
 
 [editable path="Block"]
 [editable path="Block2"]
