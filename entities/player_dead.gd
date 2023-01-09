@@ -6,12 +6,16 @@ const TIME := 0.8
 onready var sprite := $Sprite
 onready var rect := $Polygon2D
 
+onready var death_stream := $DeathStream
+
 func _ready():
 	$Particles2D.restart()
 	self.remove_child(rect)
 	get_parent().add_child(rect)
 
 func _physics_process(delta: float) -> void:
+	if timer == 0:
+		death_stream.play()
 	timer += delta
 	if timer >= TIME:
 		queue_free()

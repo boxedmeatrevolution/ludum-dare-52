@@ -44,6 +44,12 @@ onready var dash_effect_sprite := $DashEffect/Sprite
 onready var fruit_particles := $Sprite/FruitEffect/Particles2D
 onready var skate_particles := $Sprite/SkateEffect/Particles2D
 
+onready var dash_stream := $DashStream
+onready var land_stream := $LandStream
+onready var skate_stream := $SkateStream
+onready var skate_jump_stream := $SkateJumpStream
+onready var harvest_stream := $HarvestStream
+
 var state: int = State.STAND
 
 var fruit_position := Vector2.ZERO
@@ -76,6 +82,8 @@ func _physics_process(delta: float) -> void:
 		add_timer = true
 		get_parent().add_child($"/root/GameController".timer)
 	skate_particles.emitting = (state == State.SLIDE && abs(slide_velocity) == SLIDE_SPEED_ICE)
+	if (state == State.SLIDE && abs(slide_velocity) < SLIDE_SPEED_ICE):
+		skate_stream.stop()
 	if dash_input_timer > 0.0:
 		dash_input_timer -= delta
 	if Input.is_action_just_pressed("dash"):
@@ -110,6 +118,7 @@ func _physics_process(delta: float) -> void:
 				rotate_around_rotation_offset(dash_velocity.angle() + 0.5 * PI)
 				state = State.DASH
 				dash_chain += 1
+				play_dash_stream()
 	elif state == State.SLIDE:
 		var normal := get_normal()
 		var target_rotation := normal.angle() + 0.5 * PI
@@ -118,10 +127,14 @@ func _physics_process(delta: float) -> void:
 		#sprite.rotation -= delta_rotation * delta / 0.1
 		var friction := SLIDE_FRICTION
 		if stand_block.ice:
+			if !skate_stream.playing:
+				skate_stream.play()
 			if abs(slide_velocity) >= SLIDE_SPEED_ICE:
 				friction = 0.0
 			else:
 				friction = SLIDE_FRICTION_ICE
+		else:
+			skate_stream.stop()
 		var delta_slide_velocity := -slide_velocity * friction * delta
 		if abs(delta_slide_velocity) >= abs(slide_velocity):
 			slide_velocity = 0.0
@@ -129,6 +142,7 @@ func _physics_process(delta: float) -> void:
 			slide_velocity += delta_slide_velocity
 		if slide_velocity == 0.0:
 			state = State.STAND
+			skate_stream.stop()
 		else:
 			var max_distance := abs(slide_velocity * delta)
 			while max_distance > 0.0 && state == State.SLIDE:
@@ -176,6 +190,7 @@ func _physics_process(delta: float) -> void:
 						position += dash_velocity * delta + 1.0 * old_normal
 						rotate_around_rotation_offset(dash_velocity.angle() + 0.5 * PI)
 						state = State.DASH
+						play_dash_stream()
 				elif edge_distance < max_distance:
 					var old_tangent := get_tangent()
 					var old_normal := get_normal()
@@ -215,6 +230,7 @@ func _physics_process(delta: float) -> void:
 						position += dash_velocity * delta + 1.0 * old_normal
 						rotate_around_rotation_offset(dash_velocity.angle() + 0.5 * PI)
 						state = State.DASH
+						play_dash_stream()
 				else:
 					stand_position = next_stand_position
 					position = next_position
@@ -234,6 +250,7 @@ func _physics_process(delta: float) -> void:
 				rotate_around_rotation_offset(dash_velocity.angle() + 0.5 * PI)
 				state = State.DASH
 				dash_chain += 1
+				play_dash_stream()
 	elif state == State.DASH:
 		dash_effect.modulate = lerp(Color.white, Color.red, tanh((dash_chain - 1) / 4.0))
 		# Angle position based on relative mouse coordinate
@@ -253,6 +270,7 @@ func _physics_process(delta: float) -> void:
 			state = State.SLIDE
 			perfect_dash_timer = PERFECT_DASH_TIME
 			animation_player.play("slide")
+			land_stream.play()
 			stand_block = raycast.collider
 			stand_segment_idx = raycast.shape
 			stand_position = convert_pos_global_to_seg(stand_block, stand_segment_idx, raycast.position)
@@ -277,6 +295,7 @@ func _physics_process(delta: float) -> void:
 				dash_particles.emitting = true
 				dash_effect_sprite.visible = true
 				animation_player.play("dash")
+				play_dash_stream()
 				var offset := rotation_offset_vector()
 				position = fruit_position - offset
 				rotate_around_rotation_offset(target_direction.angle() + 0.5 * PI)
@@ -349,6 +368,7 @@ func _on_HitBox_area_entered(area: Area2D) -> void:
 		fruit_particles.restart()
 		fruit_particles.emitting = true
 		fruit_position = fruit.position
+		harvest_stream.play()
 	elif area.get_collision_layer_bit(DOOR_BIT):
 		$"/root/GameController".try_enter_door()
 
@@ -364,3 +384,10 @@ func _on_HurtBox_area_entered(area: Area2D) -> void:
 	player_dead.position = position + rotation_offset_vector()
 	queue_free()
 	$"/root/GameController".trigger_player_death()
+
+func play_dash_stream() -> void:
+	if (abs(slide_velocity) == SLIDE_SPEED_ICE):
+		skate_jump_stream.play()
+	else:
+		dash_stream.play()
+	skate_stream.stop()
