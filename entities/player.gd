@@ -18,6 +18,7 @@ const HAZARD_MASK := 0b0000000000001000
 const DOOR_BIT := 4
 const DOOR_MASK :=   0b0000000000010000
 
+const FRUIT_DASH_TIME := 0.1
 const DASH_STEER_STRENGTH := 0.3#0.6
 const DASH_STEER_SENSITIVITY := 1.0 / 200.0
 const DASH_SPEED := 350.0#600.0
@@ -47,6 +48,7 @@ var slide_velocity := 0.0
 var dash_velocity := Vector2.ZERO
 var dash_chain := 0
 var perfect_dash_timer := 0.0
+var fruit_dash_timer := 0.0
 
 const DASH_INPUT_TIME := 0.1
 var dash_input_timer := 0.0
@@ -69,6 +71,9 @@ func _physics_process(delta: float) -> void:
 		else:
 			perfect_dash_timer = 0.0
 			dash_chain = 0
+	
+	if fruit_dash_timer > 0.0:
+		fruit_dash_timer -= delta
 	if state == State.STAND:
 		var normal := get_normal()
 		var target_rotation := normal.angle() + 0.5 * PI
@@ -249,6 +254,18 @@ func _physics_process(delta: float) -> void:
 				bubble_effect.add_child(bubble_droplet)
 		else:
 			position = next_position
+			if input_dash_check() && fruit_dash_timer > 0.0:
+				fruit_dash_timer = 0.0
+				var target_direction := input_target_position()
+				var launch_effect := LaunchEffectScene.instance()
+				get_parent().add_child(launch_effect)
+				launch_effect.rotation = get_rotation()
+				launch_effect.position = position
+				dash_particles.emitting = true
+				animation_player.play("dash")
+				dash_velocity = (DASH_SPEED + tanh(dash_chain / 4) * DASH_CHAIN_SPEED) * target_direction
+				rotate_around_rotation_offset(dash_velocity.angle() + 0.5 * PI)
+				dash_chain += 1
 
 func input_dash_check() -> bool:
 	return dash_input_timer > 0.0
@@ -304,6 +321,7 @@ func _on_HitBox_area_entered(area: Area2D) -> void:
 	if area.get_collision_layer_bit(FRUIT_BIT):
 		var fruit = area.get_parent()
 		fruit.harvest()
+		fruit_dash_timer = FRUIT_DASH_TIME
 	elif area.get_collision_layer_bit(DOOR_BIT):
 		$"/root/GameController".try_enter_door()
 
