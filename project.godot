@@ -11,7 +11,7 @@ config_version=4
 [application]
 
 config/name="LudumDare52"
-run/main_scene="res://levels/level_test.tscn"
+run/main_scene="res://levels/level_1.tscn"
 config/icon="res://icon.png"
 
 [autoload]
