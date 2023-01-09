@@ -1,6 +1,6 @@
 extends Node
 
-const TIME_TO_RESET_AFTER_DEATH := 0.6
+const TIME_TO_RESET_AFTER_DEATH := 1.0
 const TIME_TO_LOAD_NEXT_LEVEL := 3.0
 
 var spawn_player_next_tick := true
@@ -12,10 +12,17 @@ var levels := [
 	"res://levels/level_4.tscn",
 	"res://levels/level_5.tscn",
 ]
+var level_time := [
+	15,
+	20,
+	12,
+	13
+]
 
 var num_fruits_remaining := 0
 var spaceship = null
 var player = null
+var timer = null
 
 var is_player_dead := false
 var is_level_complete := false
@@ -27,6 +34,7 @@ func _ready() -> void:
 	var loaded_level_idx = levels.find(loaded_level_path)
 	if loaded_level_idx != -1:
 		current_level_idx = loaded_level_idx
+		load_level(current_level_idx)
 	
 func _process(delta: float) -> void:
 	if spawn_player_next_tick:
