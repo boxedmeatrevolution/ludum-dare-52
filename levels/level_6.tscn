@@ -191,14 +191,14 @@ position = Vector2( 1238, 240 )
 [node name="Thorn26" parent="." instance=ExtResource( 4 )]
 position = Vector2( 1299, 83 )
 
+[node name="Thorn28" parent="." instance=ExtResource( 4 )]
+position = Vector2( 1264, 83 )
+
+[node name="Thorn29" parent="." instance=ExtResource( 4 )]
+position = Vector2( 1228, 82 )
+
 [node name="Thorn25" parent="." instance=ExtResource( 4 )]
 position = Vector2( 1343, 171 )
-
-[node name="Thorn4" parent="Thorn25" instance=ExtResource( 4 )]
-position = Vector2( -79, -88 )
-
-[node name="Thorn5" parent="Thorn25" instance=ExtResource( 4 )]
-position = Vector2( -115, -89 )
 
 [node name="Fruit3" parent="." instance=ExtResource( 5 )]
 position = Vector2( 781, 589 )
