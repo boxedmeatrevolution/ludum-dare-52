@@ -5,214 +5,163 @@
 [ext_resource path="res://entities/player.tscn" type="PackedScene" id=3]
 [ext_resource path="res://entities/fruit.tscn" type="PackedScene" id=4]
 [ext_resource path="res://entities/thorn.tscn" type="PackedScene" id=5]
+[ext_resource path="res://entities/moving_thorn.tscn" type="PackedScene" id=6]
 
 [sub_resource type="Curve2D" id=2]
 _data = {
-"points": PoolVector2Array( 0, 0, 0, 0, 1010, 1029, 0, 0, 0, 0, 580, 1026, 0, 0, 0, 0, 592, 672, -111.668, 2.04895, 111.668, -2.04895, 702, 583, -53.2727, 6.14685, 53.2727, -6.14685, 913, 674, -45.0769, -1.02448, 45.0769, 1.02448, 1005, 620, -22.5385, -18.4406, 22.5385, 18.4406, 1075, 673, 0, 0, 0, 0, 1116, 688, 0, 0, 0, 0, 1212, 690, 0, 0, 0, 0, 1212, 779, 0, 0, 0, 0, 1205, 1025, 0, 0, 0, 0, 1010, 1029 )
-}
-
-[sub_resource type="Curve2D" id=3]
-_data = {
-"points": PoolVector2Array( 0, 0, 0, 0, 1567, 438, 0, 0, 0, 0, 1577, 623, 0, 0, 0, 0, 1356, 642, 0, 0, 0, 0, 1281, 648, 0, 0, 0, 0, 1284, 585, 12.2937, 35.8566, -12.2937, -35.8566, 1266, 520, 5.12238, 43.028, -5.12238, -43.028, 1220, 451, -19.465, 36.8811, 19.465, -36.8811, 1255, 369, 0, 0, 0, 0, 1272, 305, 0, 0, 0, 0, 1276, 238, 0, 0, 0, 0, 1530, 151, 0, 0, 0, 0, 1567, 438 )
+"points": PoolVector2Array( 0, 0, 0, 0, 1489, 418, 0, 0, 0, 0, 1457, 63, 2.43919, -48.7838, -2.43919, 48.7838, 1079, 27, -25.2049, -40.6531, 25.2049, 40.6531, 1092, 153, -1.62613, -126.025, 1.62613, 126.025, 1275, 371, 17.0743, -62.6058, -17.0743, 62.6058, 1109, 591, -33.3356, -58.5405, 33.3356, 58.5405, 1096, 806, 0, 0, 0, 0, 1479, 755, 0, 0, 0, 0, 1489, 418 )
 }
 
 [sub_resource type="Curve2D" id=4]
 _data = {
-"points": PoolVector2Array( 29.7098, -38.9301, -29.7098, 38.9301, 805, 338, -59.3785, -21.8763, 59.3785, 21.8763, 765, 500, -60.1395, -27.8664, 60.1395, 27.8664, 899, 464, -71.6185, 52.7703, 71.6185, -52.7703, 1103, 526, 17.9698, 60.9411, -17.9698, -60.9411, 1026, 343, 93.5182, 46.3745, -93.5182, -46.3745, 1078, 149, 24.5874, -34.8322, -24.5874, 34.8322, 805, 338 )
+"points": PoolVector2Array( 0, 0, 0, 0, 1649, 397, 0, 0, 0, 0, 1633, -101, 0, 0, 0, 0, 259, -131, -43.9054, -19.5135, 43.9054, 19.5135, 280, 146, -60.9797, 3.25225, 60.9797, -3.25225, 595, 64, -59.3536, 6.5045, 59.3536, -6.5045, 776, 77, -51.2229, -17.0743, 51.2229, 17.0743, 1039, 45, -26.8311, -21.9527, 26.8311, 21.9527, 1106, 141, -30.8964, -52.036, 30.8964, 52.036, 1310, 234, 27.6441, -53.6621, -27.6441, 53.6621, 1343, 463, 67.4842, -58.5405, -67.4842, 58.5405, 1185, 611, 42.2793, -63.4189, -42.2793, 63.4189, 1053, 737, 85.3716, -19.5135, -85.3716, 19.5135, 848, 717, 104.072, -23.5788, -104.072, 23.5788, 622, 676, 74.8018, -25.2049, -74.8018, 25.2049, 284, 632, 0, 0, 0, 0, 233, 894, 0, 0, 0, 0, 1653, 861, 0, 0, 0, 0, 1649, 397 )
 }
 
-[sub_resource type="Curve2D" id=5]
+[sub_resource type="Curve2D" id=3]
 _data = {
-"points": PoolVector2Array( 0, 0, 0, 0, 987, -261, 0, 0, 0, 0, 1236, -103, -75.8112, 9.22028, 75.8112, -9.22028, 1375, -173, -32.7832, -16.3916, 32.7832, 16.3916, 1543, -140, 0, 0, 0, 0, 1614, -115, 0, 0, 0, 0, 1669, -110, 0, 0, 0, 0, 1666, -285, 0, 0, 0, 0, 2079, -542, 0, 0, 0, 0, 1396, -771, 0, 0, 0, 0, 1087, -641, 0, 0, 0, 0, 987, -261 )
+"points": PoolVector2Array( 0, -69.9234, 0, 69.9234, 673, 360, 80.4932, 0, -80.4932, 0, 447, 456, 0.813063, 69.9234, -0.813063, -69.9234, 372, 365, -66.6711, 0.813063, 66.6711, -0.813063, 444, 273, -1.62613, -79.6801, 1.62613, 79.6801, 673, 360 )
 }
 
 [sub_resource type="Curve2D" id=1]
 _data = {
-"points": PoolVector2Array( 0, 0, 0, 0, -237, -361, 0, 0, 0, 0, -1038, 592, 0, 0, 0, 0, 318, 1209, 0, 0, 0, 0, 813, 873, 121.913, 13.3182, -121.913, -13.3182, 614, 681, 102.892, 113.535, -102.892, -113.535, 375, 698, 40.1489, 79.7525, -40.1489, -79.7525, 111, 646, -29.9631, 107.641, 29.9631, -107.641, 260, 454, 48.9511, 47.5525, -48.9511, -47.5525, 291, 292, 92.3078, 13.986, -92.3078, -13.986, 98, 382, -233.676, 150.903, 233.676, -150.903, 166, 132, -118.335, 5.62362, 118.335, -5.62362, 452, 237, -98.9419, 19.9883, 98.9419, -19.9883, 554, 104, -95.9938, 12.0712, 95.9938, -12.0712, 740, 171, -101.94, 40.9759, 101.94, -40.9759, 852, 45, 0, 0, 0, 0, 1080, -229, 0, 0, 0, 0, 948, -849, 0, 0, 0, 0, -237, -361 )
+"points": PoolVector2Array( 0, 0, 0, 0, -158, 468, -3.25225, 491.903, 3.25225, -491.903, -167, 158, 0, 0, 0, 0, 210, -170, 0, 0, 0, 0, 377, -145, 0, 0, 0, 0, 558, 2, 0, 0, 0, 0, 587, 186, 0, 0, 0, 0, 314, 189, 62.6058, -47.9707, -62.6058, 47.9707, 111, 230, 0, 0, 0, 0, 45, 325, 0, 0, 0, 0, 48, 388, -56.9144, -43.9054, 56.9144, 43.9054, 110, 485, 0, 0, 0, 0, 317, 536, 0, 0, 0, 0, 571, 533, 0, 0, 0, 0, 565, 748, 0, 0, 0, 0, 385, 915, 0, 0, 0, 0, -96, 889, 0, 0, 0, 0, -158, 468 )
 }
 
-[sub_resource type="Curve2D" id=6]
+[sub_resource type="Curve2D" id=5]
 _data = {
-"points": PoolVector2Array( 0, 43.3567, 0, -43.3567, 549, 382, -65.7343, 1.3986, 65.7343, -1.3986, 643, 270, 1.3986, -61.5385, -1.3986, 61.5385, 770, 391, 64.3357, 4.19581, -64.3357, -4.19581, 641, 504, 0, 37.7623, 0, -37.7623, 549, 382 )
+"points": PoolVector2Array( 43.9054, -1.62612, -43.9054, 1.62612, 976, 302, -0.813062, -42.2792, 0.813062, 42.2792, 900, 392, -43.9054, 1.62612, 43.9054, -1.62612, 982, 467, 0.813062, 43.9054, -0.813062, -43.9054, 1061, 385, 42.2792, 0.813062, -42.2792, -0.813062, 976, 302 )
 }
 
 [node name="Node2D" type="Node2D"]
 
 [node name="Ship" parent="." instance=ExtResource( 2 )]
-position = Vector2( 77, 244 )
-rotation = 2.0752
-scale = Vector2( 1, 1 )
+position = Vector2( 187, 381 )
+rotation = -1.55509
 
 [node name="Player" parent="." instance=ExtResource( 3 )]
 
-[node name="Fruit" parent="." instance=ExtResource( 4 )]
-position = Vector2( 1279, 683 )
-
-[node name="Thorn18" parent="." instance=ExtResource( 5 )]
-position = Vector2( 1217, 638 )
-
-[node name="Thorn19" parent="." instance=ExtResource( 5 )]
-position = Vector2( 933, 594 )
-
-[node name="Thorn20" parent="." instance=ExtResource( 5 )]
-position = Vector2( 1249, 612 )
-
-[node name="Thorn21" parent="." instance=ExtResource( 5 )]
-position = Vector2( 1251, 548 )
-
-[node name="Thorn22" parent="." instance=ExtResource( 5 )]
-position = Vector2( 1172, 648 )
-
-[node name="Thorn23" parent="." instance=ExtResource( 5 )]
-position = Vector2( 1227, 502 )
-
-[node name="Thorn24" parent="." instance=ExtResource( 5 )]
-position = Vector2( 1118, 640 )
-
-[node name="Fruit2" parent="." instance=ExtResource( 4 )]
-position = Vector2( 1271, 161 )
-
-[node name="Fruit4" parent="." instance=ExtResource( 4 )]
-position = Vector2( 748, 182 )
-
-[node name="Fruit5" parent="." instance=ExtResource( 4 )]
-position = Vector2( 579, 130 )
-
-[node name="Fruit6" parent="." instance=ExtResource( 4 )]
-position = Vector2( 468, 241 )
-
-[node name="Fruit7" parent="." instance=ExtResource( 4 )]
-position = Vector2( 441, 605 )
-
-[node name="Fruit8" parent="." instance=ExtResource( 4 )]
-position = Vector2( 333, 402 )
-
-[node name="Fruit9" parent="." instance=ExtResource( 4 )]
-position = Vector2( 199, 545 )
-
-[node name="Thorn" parent="." instance=ExtResource( 5 )]
-position = Vector2( 1213, 327 )
-
-[node name="Thorn2" parent="." instance=ExtResource( 5 )]
-position = Vector2( 985, 567 )
-
-[node name="Thorn3" parent="." instance=ExtResource( 5 )]
-position = Vector2( 1232, 289 )
-
-[node name="Thorn4" parent="." instance=ExtResource( 5 )]
-position = Vector2( 1075, 611 )
-
-[node name="Thorn5" parent="." instance=ExtResource( 5 )]
-position = Vector2( 1202, 463 )
-
-[node name="Thorn6" parent="." instance=ExtResource( 5 )]
-position = Vector2( 1029, 576 )
-
-[node name="Block2" parent="." instance=ExtResource( 1 )]
+[node name="Block4" parent="." instance=ExtResource( 1 )]
 ice = true
 
-[node name="Path2D" parent="Block2" index="0"]
-position = Vector2( -19, 35 )
+[node name="Path2D" parent="Block4" index="0"]
+position = Vector2( 7, 6 )
 curve = SubResource( 2 )
 
 [node name="Block3" parent="." instance=ExtResource( 1 )]
-ice = true
 
 [node name="Path2D" parent="Block3" index="0"]
-position = Vector2( 51, -34 )
-curve = SubResource( 3 )
-
-[node name="Block4" parent="." instance=ExtResource( 1 )]
-
-[node name="Path2D" parent="Block4" index="0"]
-position = Vector2( 113, 74 )
 curve = SubResource( 4 )
 
-[node name="Block5" parent="." instance=ExtResource( 1 )]
-ice = true
+[node name="Block2" parent="." instance=ExtResource( 1 )]
 
-[node name="Path2D" parent="Block5" index="0"]
-position = Vector2( -466, 215 )
-curve = SubResource( 5 )
+[node name="Path2D" parent="Block2" index="0"]
+position = Vector2( -115, 18 )
+curve = SubResource( 3 )
 
 [node name="Block" parent="." instance=ExtResource( 1 )]
-
-[node name="Path2D" parent="Block" index="0"]
-position = Vector2( 2, -49 )
-curve = SubResource( 1 )
-
-[node name="Block6" parent="." instance=ExtResource( 1 )]
 ice = true
 
-[node name="Path2D" parent="Block6" index="0"]
-curve = SubResource( 6 )
+[node name="Path2D" parent="Block" index="0"]
+position = Vector2( 0, 24 )
+curve = SubResource( 1 )
 
-[node name="Fruit" parent="Block6" instance=ExtResource( 4 )]
-position = Vector2( 823, 381 )
+[node name="Thorn" parent="." instance=ExtResource( 5 )]
+position = Vector2( 142, 316 )
 
-[node name="Fruit2" parent="Block6" instance=ExtResource( 4 )]
-position = Vector2( 489, 399 )
+[node name="Thorn2" parent="." instance=ExtResource( 5 )]
+position = Vector2( 178, 317 )
 
-[node name="Thorn8" parent="." instance=ExtResource( 5 )]
-position = Vector2( 1179, 363 )
+[node name="Thorn3" parent="." instance=ExtResource( 5 )]
+position = Vector2( 209, 317 )
 
-[node name="Thorn9" parent="." instance=ExtResource( 5 )]
-position = Vector2( 1167, 415 )
+[node name="Thorn4" parent="." instance=ExtResource( 5 )]
+position = Vector2( 242, 319 )
 
-[node name="Thorn10" parent="." instance=ExtResource( 5 )]
-position = Vector2( 882, 609 )
+[node name="Thorn5" parent="." instance=ExtResource( 5 )]
+position = Vector2( 141, 441 )
 
-[node name="Thorn11" parent="." instance=ExtResource( 5 )]
-position = Vector2( 1211, 749 )
-
-[node name="Thorn12" parent="." instance=ExtResource( 5 )]
-position = Vector2( 1253, 748 )
-
-[node name="Thorn13" parent="." instance=ExtResource( 5 )]
-position = Vector2( 1297, 748 )
-
-[node name="Thorn14" parent="." instance=ExtResource( 5 )]
-position = Vector2( 1337, 735 )
-
-[node name="Thorn15" parent="." instance=ExtResource( 5 )]
-position = Vector2( 1345, 693 )
-
-[node name="Thorn16" parent="." instance=ExtResource( 5 )]
-position = Vector2( 1344, 647 )
+[node name="Thorn6" parent="." instance=ExtResource( 5 )]
+position = Vector2( 174, 440 )
 
 [node name="Thorn7" parent="." instance=ExtResource( 5 )]
-position = Vector2( 1341, 128 )
+position = Vector2( 210, 438 )
 
-[node name="Thorn17" parent="." instance=ExtResource( 5 )]
-position = Vector2( 1334, 91 )
+[node name="Thorn8" parent="." instance=ExtResource( 5 )]
+position = Vector2( 238, 436 )
 
-[node name="Thorn27" parent="." instance=ExtResource( 5 )]
-position = Vector2( 1238, 240 )
+[node name="Fruit" parent="." instance=ExtResource( 4 )]
+position = Vector2( 1250, 383 )
 
-[node name="Thorn26" parent="." instance=ExtResource( 5 )]
-position = Vector2( 1299, 83 )
-
-[node name="Thorn25" parent="." instance=ExtResource( 5 )]
-position = Vector2( 1343, 171 )
-
-[node name="Thorn4" parent="Thorn25" instance=ExtResource( 5 )]
-position = Vector2( -79, -88 )
-
-[node name="Thorn5" parent="Thorn25" instance=ExtResource( 5 )]
-position = Vector2( -115, -89 )
+[node name="Fruit2" parent="." instance=ExtResource( 4 )]
+position = Vector2( 113, 288 )
 
 [node name="Fruit3" parent="." instance=ExtResource( 4 )]
-position = Vector2( 781, 589 )
+position = Vector2( 104, 465 )
 
-[node name="Fruit10" parent="." instance=ExtResource( 4 )]
-position = Vector2( 955, 93 )
+[node name="Fruit4" parent="." instance=ExtResource( 4 )]
+position = Vector2( 1050, 658 )
 
-[node name="Fruit11" parent="." instance=ExtResource( 4 )]
-position = Vector2( 289, 112 )
+[node name="Fruit5" parent="." instance=ExtResource( 4 )]
+position = Vector2( 1028, 102 )
 
-[editable path="Block2"]
-[editable path="Block3"]
+[node name="Fruit6" parent="." instance=ExtResource( 4 )]
+position = Vector2( 719, 379 )
+
+[node name="Fruit7" parent="." instance=ExtResource( 4 )]
+position = Vector2( 1035, 393 )
+
+[node name="Fruit8" parent="." instance=ExtResource( 4 )]
+position = Vector2( 556, 256 )
+
+[node name="Fruit9" parent="." instance=ExtResource( 4 )]
+position = Vector2( 560, 506 )
+
+[node name="Path2D" type="Path2D" parent="."]
+position = Vector2( 54, 9 )
+curve = SubResource( 5 )
+
+[node name="MovingThorn" parent="Path2D" instance=ExtResource( 6 )]
+position = Vector2( 976, 302 )
+rotation = 3.07211
+period = 4.0
+motion_loop = true
+
+[node name="MovingThorn2" parent="Path2D" instance=ExtResource( 6 )]
+position = Vector2( 976, 302 )
+rotation = 3.07211
+period = 4.0
+motion_loop = true
+time_offset = 0.6
+
+[node name="MovingThorn3" parent="Path2D" instance=ExtResource( 6 )]
+position = Vector2( 976, 302 )
+rotation = 3.07211
+period = 4.0
+motion_loop = true
+time_offset = 0.3
+
+[node name="MovingThorn4" parent="Path2D" instance=ExtResource( 6 )]
+position = Vector2( 976, 302 )
+rotation = 3.07211
+period = 4.0
+motion_loop = true
+time_offset = 2.3
+
+[node name="MovingThorn5" parent="Path2D" instance=ExtResource( 6 )]
+position = Vector2( 976, 302 )
+rotation = 3.07211
+period = 4.0
+motion_loop = true
+time_offset = 2.0
+
+[node name="MovingThorn6" parent="Path2D" instance=ExtResource( 6 )]
+position = Vector2( 976, 302 )
+rotation = 3.07211
+period = 4.0
+motion_loop = true
+time_offset = 2.6
+
 [editable path="Block4"]
-[editable path="Block5"]
+[editable path="Block3"]
+[editable path="Block2"]
 [editable path="Block"]
-[editable path="Block6"]
