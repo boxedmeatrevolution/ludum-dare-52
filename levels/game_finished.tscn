@@ -1,0 +1,16 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://sprites/background.png" type="Texture" id=1]
+
+[node name="GameFinished" type="Node2D"]
+
+[node name="Sprite" type="Sprite" parent="."]
+texture = ExtResource( 1 )
+centered = false
+
+[node name="Label" type="Label" parent="."]
+margin_left = 16.0
+margin_top = 11.0
+margin_right = 202.0
+margin_bottom = 25.0
+text = "Congrats! You beat the game!"

@@ -11,7 +11,8 @@ var levels := [
 	"res://levels/level_3.tscn",
 	"res://levels/level_4.tscn",
 	"res://levels/level_5.tscn",
-	"res://levels/level_6.tscn"
+	"res://levels/level_6.tscn",
+	"res://levels/game_finished.tscn"
 ]
 var level_time := [
 	45,
@@ -19,7 +20,8 @@ var level_time := [
 	25,
 	25,
 	25,
-	25
+	25,
+	100000,
 ]
 
 var num_fruits_remaining := 0
